@@ -3,7 +3,7 @@ import { app } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
-import { FluidService } from "../services/fluid.js"
+import FluidService from "../services/fluid.js"
 
 class Tab extends React.Component {
   constructor(props) {
@@ -24,9 +24,7 @@ class Tab extends React.Component {
         });
 
         // Set up Fluid
-        const f = new FluidService();
-
-        f.createNewContainer().then((id) => {
+        FluidService.getNewContainer().then((id) => {
           alert(id);
         });
 
