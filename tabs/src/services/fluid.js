@@ -4,19 +4,17 @@ import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 
 // Service definition:
 //
-// interface IPersonList {
-//     names: string[];        // Array of people who will speak, in order, with current speaker at top
-// }
 // interface IFluidService {
 //     getNewContainer: () => string;          // Gets a new container and returns its ID
 //     useContainer: (id: string) => Promise<void>;
 //     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
 //     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
 //     nextPerson: () => Promise<void>;                 // Go to next person
-//     getPersonList: () => Promise<IPersonList>;  // Get the current person list
+//     getPersonList: () => Promise<string[]>;  // Get the current person list
 //     // Event handler called when new person list is available
-//     onNewData: (handler: (personList: IPersonList) => void) => void;
+//     onNewData: (handler: (personList: string[]) => void) => void;
 // }
+
 
 // TODO: Move these to an environment file
 const FLUID_CONNECTION_TYPE = "remote";  // set to "local" or "remote"
