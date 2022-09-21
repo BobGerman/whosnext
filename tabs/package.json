@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@fluentui/react-northstar": "^0.62.0",
+    "@fluidframework/azure-client": "~1.0.1",
+    "@fluidframework/test-client-utils": "~1.0.1",
+    "fluid-framework": "~1.0.1",
     "@microsoft/teams-js": "^2.2.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -22,7 +25,8 @@
     "build:teamsfx": "cross-env-shell \"env-cmd -f .env.teamsfx.${TEAMS_FX_ENV} npm run build\"",
     "build:teamsfx:dev": "cross-env TEAMS_FX_ENV=dev npm run build:teamsfx",
     "eject": "react-scripts eject",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "localService": "npx @fluidframework/azure-local-service@latest"
   },
   "eslintConfig": {
     "extends": [

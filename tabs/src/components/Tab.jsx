@@ -3,6 +3,8 @@ import { app } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
+import { getContainerId } from "../services/fluidSimple.js"
+
 class Tab extends React.Component {
   constructor(props){
     super(props)
@@ -28,6 +30,13 @@ class Tab extends React.Component {
   render() {
     let meetingId = this.state.context['meetingId'] ?? "";
     let userPrincipleName = this.state.context['userPrincipalName'] ?? "";
+
+    // Set up Fluid
+    getContainerId().then((id) => {
+      alert(id);
+    });
+
+
 
     return (
     <div>
