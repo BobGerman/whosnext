@@ -9,9 +9,10 @@ import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 // }
 // interface IFluidService {
 //     getNewContainer: () => string;          // Gets a new container and returns its ID
-//     addPerson: (name: string) => void;      // Adds a person to the list
-//     removePerson: (name: string) => void;   // Removes a person from the list
-//     nextPerson: () => void;                 // Go to next person
+//     useContainer: (id: string) => Promise<void>;
+//     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
+//     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
+//     nextPerson: () => Promise<void>;                 // Go to next person
 //     getPersonList: () => Promise<IPersonList>;  // Get the current person list
 //     // Event handler called when new person list is available
 //     onNewData: (handler: (personList: IPersonList) => void) => void;
