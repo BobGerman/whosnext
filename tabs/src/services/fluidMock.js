@@ -60,4 +60,4 @@ class MockFluidService {
 
 }
 
-export default new FluidService();
+export default new MockFluidService();

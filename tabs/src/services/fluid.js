@@ -22,14 +22,21 @@ const FLUID_REMOTE_TENANT_ID = "4d24d9a1-624a-49fd-8ad7-e7031abb08e5";        //
 const FLUID_REMOTE_PRIMARY_KEY = "17b2d098a6143f434ae92d5698283810";
 const FLUID_REMOTE_ENDPOINT = "https://us.fluidrelay.azure.com";
 
-const DICE_VALUE_KEY = "dice-value-key";
-
-
 class FluidService {
 
+    // Service state
     #serviceConfig;
     #client;
     #container;
+    #people = [];
+    #newDataEventHandler;
+
+    // Constants
+    #containerSchema = {
+        initialObjects: { diceMap: SharedMap }
+    };
+    #dice_value_key = "dice-value-key";
+    
 
     constructor() {
 
@@ -57,15 +64,60 @@ class FluidService {
     }
 
     getNewContainer = async () => {
-        const containerSchema = {
-            initialObjects: { diceMap: SharedMap }
-        };
-        const { container } = await this.#client.createContainer(containerSchema);
-        container.initialObjects.diceMap.set(DICE_VALUE_KEY, 1);
+        const { container } = await this.#client.createContainer(this.#containerSchema);
+        
+        // Populate the initial data
+        container.initialObjects.diceMap.set(this.#dice_value_key, 1);
+
+        // Attach to service
         const id = await container.attach();
         this.#container = container;
         return id;
     }
+
+    useContainer = async (id) => {
+        const { container } = await this.#client.getContainer(id, this.#containerSchema);
+        await container.attach();
+        this.#container = container;
+        return id;
+    }
+
+
+
+    
+    addPerson = async (name) => {
+        this.#people.push(name);
+        await this.#fireChangedEvent();
+        return;
+    }
+
+    removePerson = async (name) => {
+        this.#people = this.#people.filter(item => item === name);
+        await this.#fireChangedEvent();
+        return;
+    }
+
+    nextPerson = async () => {
+        this.#people.pop();
+        await this.#fireChangedEvent();
+        return;
+    }
+
+    getPersonList = async () => {
+        return this.#people;
+    }
+
+    onNewData = async (e) => {
+        this.#newDataEventHandler = e;
+        return;
+    }
+
+    #fireChangedEvent = async () => {
+        if (this.#newDataEventHandler) {
+            await this.#newDataEventHandler(this.#people);
+        }
+    }
+
 
 }
 

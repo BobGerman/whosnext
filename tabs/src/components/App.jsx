@@ -2,7 +2,7 @@ import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 import Privacy from "./Privacy";
 import TermsOfUse from "./TermsOfUse";
-import Tab from "./Tab";
+import Tab from "./TestTab";    // Import from Tab for the real tab!
 import TabConfig from "./TabConfig";
 import "./App.css";
 
