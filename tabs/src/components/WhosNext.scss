@@ -1,0 +1,497 @@
+$main: #363628;
+$second: #E22C80;
+$third: #80DED9;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f7f5f6;
+  color: $main;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+#app {
+  width: 100%;
+}
+
+.display-list,
+.flex-wrapper,
+.list-item,
+.form-container,
+.speaker-list {
+  display: flex;
+}
+
+.flex-wrapper,
+.form-container,
+.list-item,
+.display-list, .speaker-list {
+  align-items: center;
+}
+
+.speaker-list {
+  flex-direction: column;
+  justify-content: center;
+ 
+  h2,
+  h4 {
+    letter-spacing: 1px;
+    align-self: center;
+    margin: 5px;
+  }
+}
+
+.flex-wrapper {
+  justify-content: space-around;
+  width: 70%;
+  margin-top: 30px;
+}
+
+.form-container {
+  align-self: flex-start;
+  margin-bottom: 20px;
+}
+
+button,
+input {
+  outline: none;
+  border: none; 
+}
+
+input {
+  width: 260px;
+  height: 30px;
+  
+  background: none;
+  color: $main;
+  font-size: 12px;
+  border: 1px solid $main;
+  border-radius: 2px;
+  &:focus {
+    background: white;
+  }
+}
+
+button {
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+  background: $second;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: white;
+  cursor: pointer;
+  transition: .3s all;
+  border-radius: 2px;
+  &:disabled {
+    background: $third;
+    opacity: 0.8;
+    transition: .3s all;
+  }
+}
+
+.close {
+  width: 20px;
+  height: 20px;
+  background: lighten($second, 3%);
+  cursor: pointer;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 16px;
+}
+
+.list-item {
+  margin: 10px 0;
+  color: $main;
+  justify-content: space-between;
+  padding: 5px 10px;
+  width: 300px;
+  &:hover {
+    transition: .7s all ease;
+    color: $second;
+    animation: 0.4s bounce infinite;
+  }
+}
+
+.list-anim-enter {
+  opacity: 0;
+  transition: 500ms all ease;
+}
+
+.list-anim-enter-active {
+  opacity: 1;
+  transition: 500ms all ease;
+  transform: rotateX(360deg);
+}
+
+.list-anim-leave {
+  opacity: 1;
+  transition: 500ms all;
+}
+
+.list-anim-leave-active {
+  opacity: 0;
+  transition: 500ms all;
+  transform: translateX(20px);
+}
+
+.display-list {
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  
+  h5 {
+    margin-bottom: 6px;
+  }
+}
+
+// Animation for list-item hover
+@keyframes bounce {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.people-list {
+  text-align: center;
+}
+
+:root {
+	--delay: 0;
+	--duration: 800ms;
+	--iterations: 1;
+}
+/* •·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•· */
+
+
+.reveal-text,
+.reveal-text::after {
+	animation-delay: var(--animation-delay, 2s);
+	animation-iteration-count: var(--iterations, 1);
+	animation-duration: var(--duration, 800ms);
+	animation-fill-mode: both;
+	animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.reveal-text {
+	--animation-delay: var(--delay, 0);
+	--animation-duration: var(--duration, 800ms);
+	--animation-iterations: var(--iterations, 1);
+	position: relative;
+	font-size: 2vw;
+	animation-name: clip-text;
+	color:$main;
+	white-space: nowrap;
+	cursor: default;
+	
+	&::after {
+		content: "";
+		position: absolute;
+		z-index: 999;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #80DED9;
+		transform: scaleX(0);
+		transform-origin: 0 50%;
+		pointer-events: none;
+		animation-name: text-revealer;
+	}
+	
+}
+
+
+@keyframes clip-text {
+	from {
+		clip-path: inset(0 100% 0 0);
+	}
+	to {
+		clip-path: inset(0 0 0 0);
+	}
+}
+
+
+@keyframes text-revealer {
+	
+	0%, 50% {
+		transform-origin: 0 50%;
+	}
+	
+	60%, 100% {
+		transform-origin: 100% 50%;		
+	}
+
+	
+	60% {
+		transform: scaleX(1);
+	}
+	
+	100% {
+		transform: scaleX(0);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
