@@ -2,50 +2,59 @@ import React from "react";
 import "./App.css";
 import { app, pages } from "@microsoft/teams-js";
 
-/**
- * The 'Config' component is used to display your group tabs
- * user configuration options.  Here you will allow the user to
- * make their choices and once they are done you will need to validate
- * their choices and communicate that to Teams to enable the save button.
- */
+import FluidService from "../services/fluid.js"
+
+// Tab configuration page
 class TabConfig extends React.Component {
-  render() {
-    // Initialize the Microsoft Teams SDK
-    app.initialize().then(() => {
-      /**
-       * When the user clicks "Save", save the url for your configured tab.
-       * This allows for the addition of query string parameters based on
-       * the settings selected by the user.
-       */
-      pages.config.registerOnSaveHandler((saveEvent) => {
-        const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
-        pages.config.setConfig({
-          suggestedDisplayName: "My Tab",
-          entityId: "Test",
-          contentUrl: baseUrl + "/index.html#/tab",
-          websiteUrl: baseUrl + "/index.html#/tab",
-        }).then(() => {
-          saveEvent.notifySuccess();
-        });
+
+
+  componentDidMount() {
+    app.initialize().then(async () => {
+
+      let containerId;
+
+      // Get the container id, which is saved as the tab's entity ID
+      const config = await pages.getConfig();
+      containerId = config?.entityId;
+      if (!containerId) {
+        containerId = await FluidService.getNewContainer();
+      }
+
+      this.setState({
+        containerId: containerId
       });
 
-      /**
-       * After verifying that the settings for your tab are correctly
-       * filled in by the user you need to set the state of the dialog
-       * to be valid.  This will enable the save button in the configuration
-       * dialog.
-       */
+      //  When the user clicks "Save", save the updated configuration
+      pages.config.registerOnSaveHandler(async (saveEvent) => {
+        const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
+        await pages.config.setConfig({
+          suggestedDisplayName: "Who's next?",
+          entityId: containerId,
+          contentUrl: baseUrl + "/index.html#/tab",
+          websiteUrl: baseUrl + "/index.html#/tab",
+        });
+        saveEvent.notifySuccess();
+      });
+
+      // OK all set up, enable the "save" button
       pages.config.setValidityState(true);
     });
+  }
+
+
+  render() {
 
     return (
       <div>
         <h1>Tab Configuration</h1>
         <div>
-          This is where you will add your tab configuration options the user can choose when the tab
-          is added to your team/group chat.
+          {this.state?.containerId ? 
+            `We have configured container ${this.state.containerId} for this tab. Please click the Save button to continue.`
+            :
+            "Loading ..."
+          }
         </div>
-      </div>
+      </div >
     );
   }
 }

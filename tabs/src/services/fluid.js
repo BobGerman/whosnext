@@ -15,21 +15,27 @@ import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
 
-
 // TODO: Move these to an environment file
 const FLUID_CONNECTION_TYPE = "remote";  // set to "local" or "remote"
 const FLUID_REMOTE_TENANT_ID = "4d24d9a1-624a-49fd-8ad7-e7031abb08e5";        // values from Fluid relay service in Azure
 const FLUID_REMOTE_PRIMARY_KEY = "17b2d098a6143f434ae92d5698283810";
 const FLUID_REMOTE_ENDPOINT = "https://us.fluidrelay.azure.com";
 
-const DICE_VALUE_KEY = "dice-value-key";
-
-
 class FluidService {
 
+    // Service state
     #serviceConfig;
     #client;
     #container;
+    #people = ["Alice", "Bob", "Charlene"];
+    #registeredEventHandlers = [];
+
+    // Constants
+    #containerSchema = {
+        initialObjects: { diceMap: SharedMap }
+    };
+    #dice_value_key = "dice-value-key";
+    
 
     constructor() {
 
@@ -57,15 +63,53 @@ class FluidService {
     }
 
     getNewContainer = async () => {
-        const containerSchema = {
-            initialObjects: { diceMap: SharedMap }
-        };
-        const { container } = await this.#client.createContainer(containerSchema);
-        container.initialObjects.diceMap.set(DICE_VALUE_KEY, 1);
+        const { container } = await this.#client.createContainer(this.#containerSchema);
+        
+        // Populate the initial data
+        container.initialObjects.diceMap.set(this.#dice_value_key, 1);
+
+        // Attach to service
         const id = await container.attach();
         this.#container = container;
         return id;
     }
+
+    useContainer = async (id) => {
+        const { container } = await this.#client.getContainer(id, this.#containerSchema);
+        // await container.attach();
+        this.#container = container;
+        return id;
+    }
+  
+    addPerson = async (name) => {
+        this.#people.push(name);
+        await this.#fireChangedEvent();
+    }
+
+    removePerson = async (name) => {
+        this.#people = this.#people.filter(item => item !== name);
+        await this.#fireChangedEvent();
+    }
+
+    nextPerson = async () => {
+        this.#people.shift();
+        await this.#fireChangedEvent();
+    }
+
+    getPersonList = async () => {
+        return this.#people;
+    }
+
+    onNewData = (e) => {
+        this.#registeredEventHandlers.push(e);
+    }
+
+    #fireChangedEvent = async () => {
+        for (let handler of this.#registeredEventHandlers) {
+            await handler(this.#people);
+        }
+    }
+
 
 }
 

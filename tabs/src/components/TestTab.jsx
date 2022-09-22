@@ -3,14 +3,15 @@ import { app, pages } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
-import FluidService from "../services/fluid.js"
+import FluidService from "../services/fluidMock.js"
 
-class Tab extends React.Component {
+class TestTab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       context: {},
-      containerId: String
+      containerId: '',
+      people: []
     }
   }
 
@@ -19,16 +20,30 @@ class Tab extends React.Component {
   componentDidMount() {
     app.initialize().then(async () => {
 
-      // Get the user context from Teams and set it in the state
       const context = await app.getContext();
 
       const config = await pages.getConfig();
       const containerId = config?.entityId;
-      
+      await FluidService.useContainer(containerId);
+
+      const people = await FluidService.getPersonList();
       this.setState({
         context: context,
-        containerId: containerId
+        containerId: containerId,
+        people: people
       });
+
+      // Update state when fluid data changes
+      FluidService.onNewData((people) => {
+        this.setState({
+          people: people
+        });
+      });
+
+      // Test scenario
+      FluidService.addPerson ("Dino");
+      // FluidService.removePerson ("Bob");
+      FluidService.nextPerson ();
     });
     // Next steps: Error handling using the error object
   }
@@ -39,13 +54,16 @@ class Tab extends React.Component {
 
     return (
       <div>
-        <h1>In-meeting app sample</h1>
+        <h1>Who's Next? Test Page</h1>
+        <p>Edit app.jsx and change the import statement to switch back to the normal tab page.</p>
         <h3>Principal Name:</h3>
         <p>{userPrincipalName}</p>
         <h3>Meeting ID:</h3>
         <p>{meetingId}</p>
         <h3>Container ID:</h3>
         <p>{this.state.containerId}</p>
+        <hr />
+        <p>{this.state.people.map(person => <p>{person}</p>)}</p>
         <MediaQuery maxWidth={280}>
           <h3>This is the side panel</h3>
           <a href="https://docs.microsoft.com/en-us/microsoftteams/platform/apps-in-teams-meetings/teams-apps-in-meetings">Need more info, open this document in new tab or window.</a>
@@ -55,4 +73,4 @@ class Tab extends React.Component {
   }
 }
 
-export default Tab;
+export default TestTab;

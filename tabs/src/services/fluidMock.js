@@ -13,51 +13,42 @@
 
 class MockFluidService {
 
-    #people = [];
-    #newDataEventHandler;
+    #people = ["Alice", "Bob", "Charlene"];
+    #registeredEventHandlers = [];
 
-    #fireChangedEvent = async () => {
-        if (this.#newDataEventHandler) {
-            await this.#newDataEventHandler(this.#people);
-        }
-    }
+    getNewContainer = async () => '12345';
 
-    getNewContainer = async () => {
-        return 12345;
-    }
-
-    useContainer = async (id) => {
-        return;
-    }
-
+    useContainer = async (id) => { }
+  
     addPerson = async (name) => {
         this.#people.push(name);
         await this.#fireChangedEvent();
-        return;
     }
 
-    removePerson = async(name) => {
-        this.#people = this.#people.filter(item => item === name);
+    removePerson = async (name) => {
+        this.#people = this.#people.filter(item => item !== name);
         await this.#fireChangedEvent();
-        return;
     }
 
     nextPerson = async () => {
-        this.#people.pop();
+        this.#people.shift();
         await this.#fireChangedEvent();
-        return;
     }
 
     getPersonList = async () => {
         return this.#people;
     }
 
-    onNewData = async (e) => {
-        this.#newDataEventHandler = e;
-        return;
+    onNewData = (e) => {
+        this.#registeredEventHandlers.push(e);
     }
 
+    #fireChangedEvent = async () => {
+        for (let handler of this.#registeredEventHandlers) {
+            await handler(this.#people);
+        }
+    }
 
 }
 
-export default new FluidService();
+export default new MockFluidService();
