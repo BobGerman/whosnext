@@ -1,5 +1,5 @@
 import React from "react";
-import { app } from "@microsoft/teams-js";
+import { app, pages } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
@@ -18,13 +18,17 @@ class Tab extends React.Component {
   //Learn more: https://reactjs.org/docs/react-component.html#componentdidmount
   componentDidMount() {
     app.initialize().then(async () => {
+
       // Get the user context from Teams and set it in the state
       const context = await app.getContext();
-      const containerId = await FluidService.getNewContainer();
-        this.setState({
-          context: context,
-          containerId: containerId
-        });
+
+      const config = await pages.getConfig();
+      const containerId = config?.entityId;
+      
+      this.setState({
+        context: context,
+        containerId: containerId
+      });
     });
     // Next steps: Error handling using the error object
   }
