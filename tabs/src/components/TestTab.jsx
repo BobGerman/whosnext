@@ -3,7 +3,7 @@ import { app, pages } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
-import FluidService from "../services/fluid.js"
+import FluidService from "../services/fluidMock.js"
 
 class TestTab extends React.Component {
   constructor(props) {
@@ -27,12 +27,23 @@ class TestTab extends React.Component {
       await FluidService.useContainer(containerId);
 
       const people = await FluidService.getPersonList();
-
       this.setState({
         context: context,
         containerId: containerId,
         people: people
       });
+
+      // Update state when fluid data changes
+      FluidService.onNewData((people) => {
+        this.setState({
+          people: people
+        });
+      });
+
+      // Test scenario
+      FluidService.addPerson ("Dino");
+      // FluidService.removePerson ("Bob");
+      FluidService.nextPerson ();
     });
     // Next steps: Error handling using the error object
   }

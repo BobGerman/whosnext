@@ -28,7 +28,7 @@ class FluidService {
     #client;
     #container;
     #people = ["Alice", "Bob", "Charlene"];
-    #newDataEventHandler;
+    #registeredEventHandlers = [];
 
     // Constants
     #containerSchema = {
@@ -80,40 +80,33 @@ class FluidService {
         this.#container = container;
         return id;
     }
-
-
-
-    
+  
     addPerson = async (name) => {
         this.#people.push(name);
         await this.#fireChangedEvent();
-        return;
     }
 
     removePerson = async (name) => {
-        this.#people = this.#people.filter(item => item === name);
+        this.#people = this.#people.filter(item => item !== name);
         await this.#fireChangedEvent();
-        return;
     }
 
     nextPerson = async () => {
-        this.#people.pop();
+        this.#people.shift();
         await this.#fireChangedEvent();
-        return;
     }
 
     getPersonList = async () => {
         return this.#people;
     }
 
-    onNewData = async (e) => {
-        this.#newDataEventHandler = e;
-        return;
+    onNewData = (e) => {
+        this.#registeredEventHandlers.push(e);
     }
 
     #fireChangedEvent = async () => {
-        if (this.#newDataEventHandler) {
-            await this.#newDataEventHandler(this.#people);
+        for (let handler of this.#registeredEventHandlers) {
+            await handler(this.#people);
         }
     }
 
