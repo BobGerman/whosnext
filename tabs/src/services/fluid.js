@@ -15,7 +15,6 @@ import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
 
-
 // TODO: Move these to an environment file
 const FLUID_CONNECTION_TYPE = "remote";  // set to "local" or "remote"
 const FLUID_REMOTE_TENANT_ID = "4d24d9a1-624a-49fd-8ad7-e7031abb08e5";        // values from Fluid relay service in Azure
@@ -28,7 +27,7 @@ class FluidService {
     #serviceConfig;
     #client;
     #container;
-    #people = [];
+    #people = ["Alice", "Bob", "Charlene"];
     #newDataEventHandler;
 
     // Constants
@@ -77,7 +76,7 @@ class FluidService {
 
     useContainer = async (id) => {
         const { container } = await this.#client.getContainer(id, this.#containerSchema);
-        await container.attach();
+        // await container.attach();
         this.#container = container;
         return id;
     }
