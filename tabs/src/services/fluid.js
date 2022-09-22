@@ -27,15 +27,15 @@ class FluidService {
     #serviceConfig;
     #client;
     #container;
-    #people = ["Alice", "Bob", "Charlene"];
+    #people = [];
     #registeredEventHandlers = [];
 
     // Constants
     #containerSchema = {
-        initialObjects: { diceMap: SharedMap }
+        initialObjects: { personMap: SharedMap }
     };
-    #dice_value_key = "dice-value-key";
-    
+    #personValueKey = "person-value-key";
+
 
     constructor() {
 
@@ -64,9 +64,9 @@ class FluidService {
 
     getNewContainer = async () => {
         const { container } = await this.#client.createContainer(this.#containerSchema);
-        
+
         // Populate the initial data
-        container.initialObjects.diceMap.set(this.#dice_value_key, 1);
+        container.initialObjects.personMap.set(this.#personValueKey, 1);
 
         // Attach to service
         const id = await container.attach();
@@ -75,25 +75,42 @@ class FluidService {
     }
 
     useContainer = async (id) => {
-        const { container } = await this.#client.getContainer(id, this.#containerSchema);
-        // await container.attach();
-        this.#container = container;
+        if (!this.#container) {
+            const { container } = await this.#client.getContainer(id, this.#containerSchema);
+            this.#container = container;
+            
+            const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+            this.#people = JSON.parse(json);
+
+            this.#container.initialObjects.personMap.on("valueChanged", async () => {
+                const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+                this.#people = JSON.parse(json);
+                for (let handler of this.#registeredEventHandlers) {
+                    await handler(this.#people);
+                }
+            });
+        }
         return id;
     }
-  
+
+    #updateFluidFromLocal = async () => {
+        const json = JSON.stringify(this.#people);
+        this.#container.initialObjects.personMap.set(this.#personValueKey, json);
+    }
+
     addPerson = async (name) => {
         this.#people.push(name);
-        await this.#fireChangedEvent();
+        await this.#updateFluidFromLocal();
     }
 
     removePerson = async (name) => {
         this.#people = this.#people.filter(item => item !== name);
-        await this.#fireChangedEvent();
+        await this.#updateFluidFromLocal();
     }
 
     nextPerson = async () => {
         this.#people.shift();
-        await this.#fireChangedEvent();
+        await this.#updateFluidFromLocal();
     }
 
     getPersonList = async () => {
@@ -103,13 +120,6 @@ class FluidService {
     onNewData = (e) => {
         this.#registeredEventHandlers.push(e);
     }
-
-    #fireChangedEvent = async () => {
-        for (let handler of this.#registeredEventHandlers) {
-            await handler(this.#people);
-        }
-    }
-
 
 }
 

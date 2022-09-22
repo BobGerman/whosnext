@@ -3,13 +3,14 @@ import { app, pages } from "@microsoft/teams-js";
 import MediaQuery from 'react-responsive';
 import './App.css';
 
-import FluidService from "../services/fluidMock.js"
+import FluidService from "../services/fluid.js"
 
 class TestTab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      context: {},
+      userPrincipalName: '',
+      meetingId: '',
       containerId: '',
       people: []
     }
@@ -21,6 +22,8 @@ class TestTab extends React.Component {
     app.initialize().then(async () => {
 
       const context = await app.getContext();
+      const userPrincipalName = context?.user?.userPrincipalName;
+      const meetingId = context?.meeting?.id;
 
       const config = await pages.getConfig();
       const containerId = config?.entityId;
@@ -28,7 +31,8 @@ class TestTab extends React.Component {
 
       const people = await FluidService.getPersonList();
       this.setState({
-        context: context,
+        userPrincipalName: userPrincipalName,
+        meetingId: meetingId,
         containerId: containerId,
         people: people
       });
@@ -39,19 +43,15 @@ class TestTab extends React.Component {
           people: people
         });
       });
-
-      // Test scenario
-      FluidService.addPerson ("Dino");
-      // FluidService.removePerson ("Bob");
-      FluidService.nextPerson ();
     });
     // Next steps: Error handling using the error object
   }
 
   render() {
-    let meetingId = this.state.context?.meeting?.id ?? "";
-    let userPrincipalName = this.state.context?.user?.userPrincipalName ?? "";
+    let meetingId = this.state.meetingId ?? "";
+    let userPrincipalName = this.state.userPrincipalName ?? "";
 
+    let isFirst = true;
     return (
       <div>
         <h1>Who's Next? Test Page</h1>
@@ -63,7 +63,21 @@ class TestTab extends React.Component {
         <h3>Container ID:</h3>
         <p>{this.state.containerId}</p>
         <hr />
-        <p>{this.state.people.map(person => <p>{person}</p>)}</p>
+        <p>{this.state.people.map(person => { 
+          let suffix = isFirst ? '<-- NOW SPEAKING' : '';
+          isFirst = false;
+          return <p>{person} {suffix}</p>;
+        })}
+        </p>
+        <button onClick={async () => {
+          await FluidService.addPerson (userPrincipalName);
+        }}>Add me</button>&nbsp;
+        <button onClick={async () => {
+          await FluidService.removePerson (userPrincipalName);
+        }}>Remove me</button>&nbsp;
+        <button onClick={async () => {
+          await FluidService.nextPerson ();
+        }}>Who's next?</button>
         <MediaQuery maxWidth={280}>
           <h3>This is the side panel</h3>
           <a href="https://docs.microsoft.com/en-us/microsoftteams/platform/apps-in-teams-meetings/teams-apps-in-meetings">Need more info, open this document in new tab or window.</a>
