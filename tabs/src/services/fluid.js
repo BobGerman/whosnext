@@ -17,12 +17,10 @@ dotenv.config()
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
 
-
 const FLUID_CONNECTION_TYPE = process.env.REACT_APP_FLUID_CONNECTION_TYPE; //remote or local
 const FLUID_REMOTE_TENANT_ID = process.env.REACT_APP_FLUID_REMOTE_TENANT_ID;       // values from Fluid relay service in Azure
 const FLUID_REMOTE_PRIMARY_KEY = process.env.REACT_APP_FLUID_REMOTE_PRIMARY_KEY;
 const FLUID_REMOTE_ENDPOINT = process.env.REACT_APP_FLUID_REMOTE_ENDPOINT;
-
 
 class FluidService {
 
@@ -67,8 +65,11 @@ class FluidService {
 
     getNewContainer = async () => {
         const { container } = await this.#client.createContainer(this.#containerSchema);
+
         // Populate the initial data
-        container.initialObjects.personMap.set(this.#personValueKey,1);
+        container.initialObjects.personMap.set(this.#personValueKey, 
+            JSON.stringify(this.#people));
+
         // Attach to service
         const id = await container.attach();
         this.#container = container;
@@ -78,12 +79,13 @@ class FluidService {
     useContainer = async (id) => {
         if (!this.#container) {
             const { container } = await this.#client.getContainer(id, this.#containerSchema);
-            this.#container = container;            
+            this.#container = container;
+            
             const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
             this.#people = JSON.parse(json);
+
             this.#container.initialObjects.personMap.on("valueChanged", async () => {
                 const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
-               
                 this.#people = JSON.parse(json);
                 for (let handler of this.#registeredEventHandlers) {
                     await handler(this.#people);
@@ -99,9 +101,6 @@ class FluidService {
     }
 
     addPerson = async (name) => {      
-        if(this.#people === 1){
-            this.#people=[];
-        }
         if (!this.#people.includes(name)) {
             this.#people.push(name);
             await this.#updateFluidFromLocal();
