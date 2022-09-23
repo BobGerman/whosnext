@@ -23,3 +23,14 @@ h2 {
 .Error {
   color: red;
 }
+
+.middle{
+  background-color: 80DED9;
+  text-align: center;
+}
+.divider {
+  background-color: gray;
+  margin-top: 10px;
+  height: 1px;
+  width: auto;
+}

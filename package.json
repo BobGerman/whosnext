@@ -11,5 +11,10 @@
     "devDependencies": {
         "@microsoft/teamsfx-cli": "1.*"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "dotenv": "^16.0.2",
+        "node-sass": "^7.0.3",
+        "react-transition-group": "^4.4.5"
+    }
 }

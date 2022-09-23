@@ -1,6 +1,8 @@
 import { SharedMap } from "fluid-framework";
 import { AzureClient } from "@fluidframework/azure-client";
 import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
+import * as dotenv from 'dotenv';
+dotenv.config()
 
 // Service definition:
 //
@@ -15,11 +17,12 @@ import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
 
-// TODO: Move these to an environment file
-const FLUID_CONNECTION_TYPE = "remote";  // set to "local" or "remote"
-const FLUID_REMOTE_TENANT_ID = "4d24d9a1-624a-49fd-8ad7-e7031abb08e5";        // values from Fluid relay service in Azure
-const FLUID_REMOTE_PRIMARY_KEY = "17b2d098a6143f434ae92d5698283810";
-const FLUID_REMOTE_ENDPOINT = "https://us.fluidrelay.azure.com";
+
+const FLUID_CONNECTION_TYPE = process.env.REACT_APP_FLUID_CONNECTION_TYPE; //remote or local
+const FLUID_REMOTE_TENANT_ID = process.env.REACT_APP_FLUID_REMOTE_TENANT_ID;       // values from Fluid relay service in Azure
+const FLUID_REMOTE_PRIMARY_KEY = process.env.REACT_APP_FLUID_REMOTE_PRIMARY_KEY;
+const FLUID_REMOTE_ENDPOINT = process.env.REACT_APP_FLUID_REMOTE_ENDPOINT;
+
 
 class FluidService {
 
@@ -64,10 +67,8 @@ class FluidService {
 
     getNewContainer = async () => {
         const { container } = await this.#client.createContainer(this.#containerSchema);
-
         // Populate the initial data
-        container.initialObjects.personMap.set(this.#personValueKey, 1);
-
+        container.initialObjects.personMap.set(this.#personValueKey,1);
         // Attach to service
         const id = await container.attach();
         this.#container = container;
@@ -77,13 +78,12 @@ class FluidService {
     useContainer = async (id) => {
         if (!this.#container) {
             const { container } = await this.#client.getContainer(id, this.#containerSchema);
-            this.#container = container;
-            
+            this.#container = container;            
             const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
             this.#people = JSON.parse(json);
-
             this.#container.initialObjects.personMap.on("valueChanged", async () => {
                 const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+               
                 this.#people = JSON.parse(json);
                 for (let handler of this.#registeredEventHandlers) {
                     await handler(this.#people);
@@ -98,13 +98,21 @@ class FluidService {
         this.#container.initialObjects.personMap.set(this.#personValueKey, json);
     }
 
-    addPerson = async (name) => {
-        this.#people.push(name);
-        await this.#updateFluidFromLocal();
+    addPerson = async (name) => {      
+        if(this.#people === 1){
+            this.#people=[];
+        }
+        if (!this.#people.includes(name)) {
+            this.#people.push(name);
+            await this.#updateFluidFromLocal();
+        }        
+       
     }
 
     removePerson = async (name) => {
-        this.#people = this.#people.filter(item => item !== name);
+        if (this.#people.includes(name)) {
+            this.#people = this.#people.filter(item => item !== name);
+        }
         await this.#updateFluidFromLocal();
     }
 
