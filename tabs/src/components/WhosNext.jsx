@@ -54,8 +54,11 @@ class TestTab extends React.Component {
   }
   //on key down enter in input box
   keyDown = async (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter') {     
       await FluidService.addPerson(e.target.value)
+      this.setState({
+        addedName:""
+      });
     }
   }
   render() {
@@ -81,9 +84,10 @@ class TestTab extends React.Component {
           </h1>
         }
         <h2>Add your name to the list to speak</h2>
-        <div><input type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
+        <div><input  type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
           <button type="submit" className="middle" onClick={async () => {
             await FluidService.addPerson(addedName?addedName:userPrincipalName);
+            this.setState({addedName:""});
           }}>+</button></div>
         <div class="divider"></div>
         <div className="display-list">
