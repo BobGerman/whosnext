@@ -1,4 +1,18 @@
-# How to use this HelloWorld In-meeting app
+# How to use this Who's next In-meeting app
+
+🧑‍💻👩🏽‍💻This project was created as part of FHL, a week dedicated to fixing, hacking and learning together something new.
+
+❓The M365 cloud advocates always had a challenge in their monthly sync meetings. They could not decide on **who's next** to give an update on project progress.
+
+🚀So [Bob German](https://github.com/BobGerman) and [Rabia Williams](https://github.com/rabwill) decided to take the necessary step, cloud 🥑 style, to create a meeting app called "Who's next" which will help choose attendees from a meeting.
+👀Here is a quick look of how the app works!
+
+![whos next image](./assets/WhosTurn.gif)
+
+⚙️They used [Teams Toolkit](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio-code), a VS Code extension to create their base teams app from a sample meeting app available in the toolkit itself.
+Then they used [Fluid Framework](https://fluidframework.com/docs/) to synchronize the view for each attendee. 
+
+⚠️This app does not require IT approval so it can be easily used internally.
 
 > Important: Please be advised that access tokens are stored in sessionStorage for you by default. This can make it possible for malicious code in your app (or code pasted into a console on your page) to access APIs at the same privilege level as your client application. Please ensure you only request the minimum necessary scopes from your client application, and perform any sensitive operations from server side code that your client has to authenticate with.
 
