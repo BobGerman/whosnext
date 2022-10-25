@@ -4,7 +4,7 @@
         "subscriptionId": "f85f553b-24a4-4a10-bd3f-675e49605b9a",
         "subscriptionName": "ca-rogerman-demo-test",
         "tenantId": "a25d4ef1-c73a-4dc1-bdb1-9a342260f216",
-        "needCreateResourceGroup": true,
+        "needCreateResourceGroup": false,
         "resourceGroupName": "WhosNext",
         "location": "West US 2",
         "resourceNameSuffix": "691fad",
