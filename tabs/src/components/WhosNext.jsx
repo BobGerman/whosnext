@@ -24,7 +24,7 @@ class TestTab extends React.Component {
    
     app.initialize().then(async () => {
       const context = await app.getContext();
-      const userPrincipalName = context?.user?.userPrincipalName;
+      const userPrincipalName = context?.user?.userPrincipalName.split('@')[0];
       const meetingId = context?.meeting?.id;
       const config = await pages.getConfig();
       const containerId = config?.entityId;
@@ -62,16 +62,6 @@ class TestTab extends React.Component {
     }
   }
   render() {
-    const buttonStyle = {
-      backgroundColor: '5b5fc7',
-      color: 'white',
-      border: 'none',
-      fontSize: '14px',
-      padding: '5px',
-      borderRadius: '5px',
-      margin: '5px 0px',
-      width: '150px'
-    };
     const wrapper = { display: 'flex', gap: '8px', alignItems: 'left' };
     const { addedName,userPrincipalName } = this.state;
 
@@ -111,10 +101,17 @@ class TestTab extends React.Component {
           }
         </div>
         <div style={wrapper}>
-          <button style={buttonStyle} onClick={async () => {
+          <button onClick={async () => {
             await FluidService.nextPerson();
           }}>
             Who's next
+          </button>
+        </div>
+        <div style={wrapper}>
+          <button className="shuffle" onClick={async () => {
+            await FluidService.shuffle();
+          }}>
+            Shuffle
           </button>
         </div>
         <MediaQuery maxWidth={280}>

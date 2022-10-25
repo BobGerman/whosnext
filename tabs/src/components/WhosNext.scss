@@ -1,6 +1,7 @@
 $main: #363628;
 $second: #E22C80;
 $third: #80DED9;
+
 * {
   margin: 0;
   padding: 0;
@@ -31,14 +32,15 @@ body {
 .flex-wrapper,
 .form-container,
 .list-item,
-.display-list, .speaker-list {
+.display-list,
+.speaker-list {
   align-items: center;
 }
 
 .speaker-list {
   flex-direction: column;
   justify-content: center;
- 
+
   h2,
   h4 {
     letter-spacing: 1px;
@@ -61,39 +63,56 @@ body {
 button,
 input {
   outline: none;
-  border: none; 
+  border: none;
 }
 
 input {
   width: 260px;
   height: 30px;
-  
+
   background: none;
   color: $main;
   font-size: 12px;
   border: 1px solid $main;
   border-radius: 2px;
+
   &:focus {
     background: white;
   }
 }
 
 button {
+  background-color: #5b5fc7;
+  color: white;
+  border: none;
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 5px 0px;
+  width: 150px;
+}
+
+.middle {
   width: 32px;
   height: 32px;
   margin: 4px;
-  background: $second;
+  background: $third;
   font-size: 14px;
   letter-spacing: 1px;
   color: white;
   cursor: pointer;
   transition: .3s all;
   border-radius: 2px;
+
   &:disabled {
     background: $third;
     opacity: 0.8;
     transition: .3s all;
   }
+}
+
+.shuffle {
+  background-color: $second;
 }
 
 .close {
@@ -116,6 +135,7 @@ button {
   justify-content: space-between;
   padding: 5px 10px;
   width: 300px;
+
   &:hover {
     transition: .7s all ease;
     color: $second;
@@ -149,7 +169,7 @@ button {
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  
+
   h5 {
     margin-bottom: 6px;
   }
@@ -160,9 +180,11 @@ button {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(3px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -173,325 +195,81 @@ button {
 }
 
 :root {
-	--delay: 0;
-	--duration: 800ms;
-	--iterations: 1;
+  --delay: 0;
+  --duration: 800ms;
+  --iterations: 1;
 }
+
 /* •·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•·•· */
 
 
 .reveal-text,
 .reveal-text::after {
-	animation-delay: var(--animation-delay, 2s);
-	animation-iteration-count: var(--iterations, 1);
-	animation-duration: var(--duration, 800ms);
-	animation-fill-mode: both;
-	animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+  animation-delay: var(--animation-delay, 2s);
+  animation-iteration-count: var(--iterations, 1);
+  animation-duration: var(--duration, 800ms);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
 .reveal-text {
-	--animation-delay: var(--delay, 0);
-	--animation-duration: var(--duration, 800ms);
-	--animation-iterations: var(--iterations, 1);
-	position: relative;
-	font-size: 2vw;
-	animation-name: clip-text;
-	color:$main;
-	white-space: nowrap;
-	cursor: default;
-	
-	&::after {
-		content: "";
-		position: absolute;
-		z-index: 999;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: #80DED9;
-		transform: scaleX(0);
-		transform-origin: 0 50%;
-		pointer-events: none;
-		animation-name: text-revealer;
-	}
-	
+  --animation-delay: var(--delay, 0);
+  --animation-duration: var(--duration, 800ms);
+  --animation-iterations: var(--iterations, 1);
+  position: relative;
+  font-size: 2vw;
+  animation-name: clip-text;
+  color: $main;
+  white-space: nowrap;
+  cursor: default;
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #80DED9;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+    animation-name: text-revealer;
+  }
+
 }
 
 
 @keyframes clip-text {
-	from {
-		clip-path: inset(0 100% 0 0);
-	}
-	to {
-		clip-path: inset(0 0 0 0);
-	}
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 
 @keyframes text-revealer {
-	
-	0%, 50% {
-		transform-origin: 0 50%;
-	}
-	
-	60%, 100% {
-		transform-origin: 100% 50%;		
-	}
 
-	
-	60% {
-		transform: scaleX(1);
-	}
-	
-	100% {
-		transform: scaleX(0);
-	}
+  0%,
+  50% {
+    transform-origin: 0 50%;
+  }
+
+  60%,
+  100% {
+    transform-origin: 100% 50%;
+  }
+
+
+  60% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(0);
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
