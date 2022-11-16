@@ -123,8 +123,11 @@ class FluidService {
     shuffle = async () => {
         // Use the Fischer-Yates algorithm
         for (let i = this.#people.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
+            let j = Math.floor(Math.random() * (i));
+            console.log (`i=${i} j=${j}`);
+            console.log ('BEFORE - ' + this.#people.join(' - '));
             [this.#people[i], this.#people[j]] = [this.#people[j], this.#people[i]];
+            console.log ('AFTER - ' + this.#people.join(' - '));
         }
         await this.#updateFluidFromLocal();
     }
