@@ -67,7 +67,7 @@ class FluidService {
         const { container } = await this.#client.createContainer(this.#containerSchema);
 
         // Populate the initial data
-        container.initialObjects.personMap.set(this.#personValueKey, 
+        container.initialObjects.personMap.set(this.#personValueKey,
             JSON.stringify(this.#people));
 
         // Attach to service
@@ -80,7 +80,7 @@ class FluidService {
         if (!this.#container) {
             const { container } = await this.#client.getContainer(id, this.#containerSchema);
             this.#container = container;
-            
+
             const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
             this.#people = JSON.parse(json);
 
@@ -100,12 +100,12 @@ class FluidService {
         this.#container.initialObjects.personMap.set(this.#personValueKey, json);
     }
 
-    addPerson = async (name) => {      
+    addPerson = async (name) => {
         if (!this.#people.includes(name)) {
             this.#people.push(name);
             await this.#updateFluidFromLocal();
-        }        
-       
+        }
+
     }
 
     removePerson = async (name) => {
@@ -117,6 +117,15 @@ class FluidService {
 
     nextPerson = async () => {
         this.#people.shift();
+        await this.#updateFluidFromLocal();
+    }
+
+    shuffle = async () => {
+        // Use the Fischer-Yates algorithm
+        for (let i = this.#people.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * i);
+            [this.#people[i], this.#people[j]] = [this.#people[j], this.#people[i]];
+        }
         await this.#updateFluidFromLocal();
     }
 
