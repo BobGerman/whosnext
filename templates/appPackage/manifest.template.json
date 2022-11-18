@@ -5,7 +5,7 @@
     "id": "{{state.fx-resource-appstudio.teamsAppId}}",
     "packageName": "com.microsoft.teams.extension",
     "developer": {
-        "name": "Teams App, Inc.",
+        "name": "Microsoft Hack Week project",
         "websiteUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}",
         "privacyUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}{{{state.fx-resource-frontend-hosting.indexPath}}}/privacy",
         "termsOfUseUrl": "{{{state.fx-resource-frontend-hosting.endpoint}}}{{{state.fx-resource-frontend-hosting.indexPath}}}/termsofuse"
@@ -19,8 +19,8 @@
         "full": "{{config.manifest.appName.full}}"
     },
     "description": {
-        "short": "Short description of {{config.manifest.appName.short}}",
-        "full": "Full description of {{config.manifest.appName.short}}"
+        "short": "Meeting app to help decide who should speak next",
+        "full": "{{config.manifest.appName.short}} is displayed in the side panel of a Teams meeting to help decide who should speak next."
     },
     "accentColor": "#FFFFFF",
     "bots": [],
