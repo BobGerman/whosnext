@@ -66,7 +66,6 @@ class TestTab extends React.Component {
   }
 
   render() {
-    const wrapper = { display: 'flex', gap: '8px', alignItems: 'left' };
     const { addedName,userPrincipalName } = this.state;
 
     return (
@@ -74,26 +73,28 @@ class TestTab extends React.Component {
       <div className="speaker-list">
 
         { /* Heading */}
-        <h1> Whose turn? </h1>
+        <h1>Who's next?</h1>
 
         { /* Current speaker (if any) */}
         {this.state.people.length > 0 &&
-          <h1 class="reveal-text">
-            {this.state.people[0]}
-          </h1>
+          <div className="speaker-box">
+            <h2>Now speaking:</h2>
+            <h1 className="reveal-text">
+              {this.state.people[0]}
+            </h1>
+          </div>
         }
 
         { /* Input box w/title and button */}
         <h2>Add your name to the list to speak</h2>
-        <div>
+        <div className="add-name">
           <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
-          <button type="submit" className="inputButton" onClick={async () => {
+          <button type="submit" onClick={async () => {
             await FluidService.addPerson(addedName ? addedName : userPrincipalName);
             this.setState({ addedName: "" });
           }}>+</button>
+          <hr />
         </div>
-
-        <div className="divider"></div>
 
         { /* List heading */}
         <div className="display-list">
@@ -111,7 +112,7 @@ class TestTab extends React.Component {
                       await FluidService.removePerson(item);
                     }}
                   >
-                    -
+                    x
                   </div>
                 </li>
               ))}
@@ -121,16 +122,16 @@ class TestTab extends React.Component {
         </div>
 
         { /* Who's next button */ }
-        <div style={wrapper}>
+        <div>
           <button onClick={async () => {
             await FluidService.nextPerson();
           }}>
-            Who's next
+            Next speaker
           </button>
         </div>
 
         { /* Shuffle button */ }
-        <div style={wrapper}>
+        <div>
           <button className="shuffle" onClick={async () => {
             await FluidService.shuffle();
           }}>
