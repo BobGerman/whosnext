@@ -13,13 +13,20 @@ body {
   font-family: 'Roboto', sans-serif;
   display: flex;
   justify-content: center;
-  height: 100vh;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+#root {
   width: 100%;
 }
 
 #app {
   width: 100%;
 }
+*/
 
 .display-list,
 .flex-wrapper,
@@ -92,6 +99,7 @@ button {
   width: 150px;
 }
 
+/*
 .middle {
   width: 32px;
   height: 32px;
@@ -110,6 +118,7 @@ button {
     transition: .3s all;
   }
 }
+*/
 
 .shuffle {
   background-color: $second;
@@ -134,7 +143,7 @@ button {
   color: $main;
   justify-content: space-between;
   padding: 5px 10px;
-  width: 300px;
+  width: 90%; /* was a pixel width */
 
   &:hover {
     transition: .7s all ease;
@@ -168,7 +177,7 @@ button {
 .display-list {
   flex-direction: column;
   justify-content: center;
-  width: 50%;
+  width: 90%;
 
   h5 {
     margin-bottom: 6px;
@@ -217,7 +226,7 @@ button {
   --animation-duration: var(--duration, 800ms);
   --animation-iterations: var(--iterations, 1);
   position: relative;
-  font-size: 2vw;
+  font-size: 20pt;
   animation-name: clip-text;
   color: $main;
   white-space: nowrap;

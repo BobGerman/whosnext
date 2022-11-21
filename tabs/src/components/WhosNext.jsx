@@ -78,7 +78,7 @@ class TestTab extends React.Component {
 
         { /* Current speaker (if any) */}
         {this.state.people.length > 0 &&
-          <h1 class="reveal-text">
+          <h1 className="reveal-text">
             {this.state.people[0]}
           </h1>
         }
