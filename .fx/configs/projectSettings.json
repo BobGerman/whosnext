@@ -29,7 +29,8 @@
             "provision": true,
             "folder": "tabs",
             "sso": false,
-            "deploy": true
+            "deploy": true,
+            "artifactFolder": "tabs\\build"
         },
         {
             "name": "azure-storage",

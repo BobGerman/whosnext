@@ -66,7 +66,7 @@ class TestTab extends React.Component {
   }
 
   render() {
-    // const wrapper = { display: 'flex', gap: '8px', alignItems: 'left' };
+    const wrapper = { display: 'flex', gap: '8px', alignItems: 'left' };
     const { addedName,userPrincipalName } = this.state;
 
     return (
