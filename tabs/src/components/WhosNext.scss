@@ -1,6 +1,8 @@
 $main: #363628;
+$first: #5b5fc7;
 $second: #E22C80;
 $third: #80DED9;
+$background: #f7f5f6;
 
 * {
   margin: 0;
@@ -8,7 +10,7 @@ $third: #80DED9;
 }
 
 body {
-  background: #f7f5f6;
+  background: $background;
   color: $main;
   font-family: 'Roboto', sans-serif;
   display: flex;
@@ -17,16 +19,6 @@ body {
   padding: 0;
   margin: 0;
 }
-
-/*
-#root {
-  width: 100%;
-}
-
-#app {
-  width: 100%;
-}
-*/
 
 .display-list,
 .flex-wrapper,
@@ -42,6 +34,12 @@ body {
 .display-list,
 .speaker-list {
   align-items: center;
+  width: 90vw;
+}
+
+h1 {
+  color: gray;
+  text-align: center;
 }
 
 .speaker-list {
@@ -50,36 +48,20 @@ body {
 
   h2,
   h4 {
+    font-size: 8pt;
+    text-align: center;
     letter-spacing: 1px;
     align-self: center;
-    margin: 5px;
+    margin: 5pt;
   }
 }
 
-.flex-wrapper {
-  justify-content: space-around;
-  width: 70%;
-  margin-top: 30px;
-}
-
-.form-container {
-  align-self: flex-start;
-  margin-bottom: 20px;
-}
-
-button,
 input {
-  outline: none;
-  border: none;
-}
-
-input {
-  width: 260px;
-  height: 30px;
+  height: 20pt;
 
   background: none;
   color: $main;
-  font-size: 12px;
+  font-size: 12pt;
   border: 1px solid $main;
   border-radius: 2px;
 
@@ -89,7 +71,7 @@ input {
 }
 
 button {
-  background-color: #5b5fc7;
+  background-color: $first;
   color: white;
   border: none;
   font-size: 14px;
@@ -99,34 +81,25 @@ button {
   width: 150px;
 }
 
-/*
-.middle {
-  width: 32px;
-  height: 32px;
-  margin: 4px;
-  background: $third;
-  font-size: 14px;
-  letter-spacing: 1px;
-  color: white;
-  cursor: pointer;
-  transition: .3s all;
-  border-radius: 2px;
-
-  &:disabled {
-    background: $third;
-    opacity: 0.8;
-    transition: .3s all;
-  }
+.addName > input {
+  margin-right: 3pt;
+  padding-bottom: 1pt;
 }
-*/
+
+.addName > button {
+  width: 30pt;
+  height: 20pt;
+  background-color: $third;
+}
 
 .shuffle {
   background-color: $second;
 }
 
+/* Close button */
 .close {
-  width: 20px;
-  height: 20px;
+  width: 16pt;
+  height: 16pt;
   background: lighten($second, 3%);
   cursor: pointer;
   border-radius: 100%;
@@ -139,10 +112,10 @@ button {
 }
 
 .list-item {
-  margin: 10px 0;
+  margin: 10pt 0;
   color: $main;
   justify-content: space-between;
-  padding: 5px 10px;
+  padding: 2pt 8pt;
   width: 90%; /* was a pixel width */
 
   &:hover {
