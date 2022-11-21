@@ -3,8 +3,8 @@
     "description": "Who's next (development build) Visit https://aka.ms/teamsfx-env-config to learn more about this.",
     "manifest": {
         "appName": {
-            "short": "Who's Next?",
-            "full": "Who's Next?"
+            "short": "Whos Next?",
+            "full": "Whos Next?"
         }
     }
 }
