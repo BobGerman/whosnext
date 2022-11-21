@@ -85,9 +85,9 @@ class TestTab extends React.Component {
 
         { /* Input box w/title and button */}
         <h2>Add your name to the list to speak</h2>
-        <div>
+        <div className="addName">
           <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
-          <button type="submit" className="inputButton" onClick={async () => {
+          <button type="submit" onClick={async () => {
             await FluidService.addPerson(addedName ? addedName : userPrincipalName);
             this.setState({ addedName: "" });
           }}>+</button>
