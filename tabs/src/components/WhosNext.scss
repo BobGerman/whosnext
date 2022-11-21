@@ -1,8 +1,8 @@
 $main: #363628;
-$heading: gray;
+$heading: #808080;
 $first: #5b5fc7;
 $second: #E22C80;
-$third: #80DED9;
+$third: #64afac;
 $background: #f7f5f6;
 
 * {
@@ -43,6 +43,14 @@ h1 {
   text-align: center;
 }
 
+.speaker-box {
+  border-width: 1px;
+  border-style: solid;
+  width: 80%;
+  padding-bottom: 5pt;
+  margin: 20pt;
+}
+
 .speaker-list {
   flex-direction: column;
   justify-content: center;
@@ -75,22 +83,27 @@ button {
   background-color: $first;
   color: white;
   border: none;
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 5px;
-  margin: 5px 0px;
-  width: 150px;
+  font-size: 12pt;
+  padding: 5pt;
+  border-radius: 5pt;
+  margin: 5pt 0;
+  width: 150pt;
 }
 
-.addName > input {
+.add-name > input {
   margin-right: 3pt;
-  padding-bottom: 1pt;
+  padding: 3pt;
 }
 
-.addName > button {
-  width: 30pt;
-  height: 20pt;
+.add-name > button {
   background-color: $third;
+  width: 30pt;
+  height: 23pt;
+  margin: 0;
+}
+
+.add-name > hr {
+  margin: 20pt;
 }
 
 .shuffle {
@@ -101,15 +114,15 @@ button {
 .close {
   width: 16pt;
   height: 16pt;
+  font-size: 16px;
+  line-height: 8pt;
   background: lighten($second, 3%);
   cursor: pointer;
   border-radius: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
   color: white;
-  font-size: 16px;
 }
 
 .list-item {
@@ -214,7 +227,6 @@ button {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #80DED9;
     transform: scaleX(0);
     transform-origin: 0 50%;
     pointer-events: none;
