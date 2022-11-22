@@ -99,7 +99,9 @@ class WhosNextTab extends React.Component {
         <div className="display-list">
           {this.state.people.length > 1 && <div>
             <div className="people-list ">
-              <h2>{this.state.people.length - 1} more people waiting to speak</h2>
+              <h2>{this.state.people.length-2 ? 
+                `${this.state.people.length - 1} more people waiting to speak` :
+                `1 person waiting to speak`}</h2>
 
               { /* List of people waiting to speak  */}
               {this.state.people.slice(1).map((item, index) => (
