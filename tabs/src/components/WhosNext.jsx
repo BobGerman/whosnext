@@ -1,11 +1,10 @@
 import React from "react";
 import { app, pages } from "@microsoft/teams-js";
-// import MediaQuery from 'react-responsive';
-import './App.css';
+
 import './WhosNext.scss';
 import FluidService from "../services/fluid.js"
 
-class TestTab extends React.Component {
+class WhosNextTab extends React.Component {
 
   constructor(props) {
     super(props);
@@ -143,4 +142,4 @@ class TestTab extends React.Component {
   }
 }
 
-export default TestTab;
+export default WhosNextTab;
