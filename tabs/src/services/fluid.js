@@ -41,7 +41,9 @@ class FluidService {
 
     constructor() {
 
-        // Set up Fluid client
+        // NOTE: For simplicity, this sample uses the InsecureTokenProvider class
+        // which should not be used in production. See this page for details:
+        // https://fluidframework.com/docs/apis/test-client-utils/insecuretokenprovider-class/
         if (FLUID_CONNECTION_TYPE === "local") {
             this.#serviceConfig = {
                 connection: {
@@ -96,7 +98,8 @@ class FluidService {
         return id;
     }
 
-    #updateFluidFromLocal = async () => {
+    // Function to uplodate the Fluid relay from the local array of people
+    #updateFluid = async () => {
         const json = JSON.stringify(this.#people);
         this.#container.initialObjects.personMap.set(this.#personValueKey, json);
     }
@@ -104,7 +107,7 @@ class FluidService {
     addPerson = async (name) => {
         if (!this.#people.includes(name)) {
             this.#people.push(name);
-            await this.#updateFluidFromLocal();
+            await this.#updateFluid();
         }
 
     }
@@ -113,12 +116,12 @@ class FluidService {
         if (this.#people.includes(name)) {
             this.#people = this.#people.filter(item => item !== name);
         }
-        await this.#updateFluidFromLocal();
+        await this.#updateFluid();
     }
 
     nextPerson = async () => {
         this.#people.shift();
-        await this.#updateFluidFromLocal();
+        await this.#updateFluid();
     }
 
     shuffle = async () => {
@@ -127,7 +130,7 @@ class FluidService {
             let j = Math.floor(Math.random() * i);
             [this.#people[i], this.#people[j]] = [this.#people[j], this.#people[i]];
         }
-        await this.#updateFluidFromLocal();
+        await this.#updateFluid();
     }
 
     getPersonList = async () => {

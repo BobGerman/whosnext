@@ -40,6 +40,8 @@ Version|Date|Author|Comments
 - Use of Fluid framework to synchronize the contents of a meeting tab
 - Creating and saving a Fluid Relay Service container in the tab configuration page
 
+WARNING: For simplicity, this sample uses the **InsecureTokenProvider** class to communicate with the Fluid Relay Service. This class should not be used in production; see [this page](https://fluidframework.com/docs/apis/test-client-utils/insecuretokenprovider-class/) for details.
+
 ## Minimal Path to Awesome
 
 ### Provision an Azure Fluid Relay Service
