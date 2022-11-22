@@ -5,8 +5,7 @@ import { app, pages } from "@microsoft/teams-js";
 import FluidService from "../services/fluid.js"
 
 // Tab configuration page
-class TabConfig extends React.Component {
-
+class WhosNextConfig extends React.Component {
 
   componentDidMount() {
     app.initialize().then(async () => {
@@ -38,6 +37,7 @@ class TabConfig extends React.Component {
 
       // OK all set up, enable the "save" button
       pages.config.setValidityState(true);
+
     });
   }
 
@@ -59,4 +59,4 @@ class TabConfig extends React.Component {
   }
 }
 
-export default TabConfig;
+export default WhosNextConfig;
