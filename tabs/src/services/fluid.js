@@ -7,29 +7,30 @@ dotenv.config()
 // Service definition:
 //
 // interface IFluidService {
-//     getNewContainer: () => string;          // Gets a new container and returns its ID
+//     getNewContainer: () => string;                   // Gets a new container and returns its ID
 //     useContainer: (id: string) => Promise<void>;
 //     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
 //     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
 //     nextPerson: () => Promise<void>;                 // Go to next person
-//     getPersonList: () => Promise<string[]>;  // Get the current person list
+//     shuffle: () => Promise<void>;                    // Shuffle the list of speakers
+//     getPersonList: () => Promise<string[]>;          // Get the current person list
 //     // Event handler called when new person list is available
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
 
-const FLUID_CONNECTION_TYPE = process.env.REACT_APP_FLUID_CONNECTION_TYPE; //remote or local
-const FLUID_REMOTE_TENANT_ID = process.env.REACT_APP_FLUID_REMOTE_TENANT_ID;       // values from Fluid relay service in Azure
+const FLUID_CONNECTION_TYPE = process.env.REACT_APP_FLUID_CONNECTION_TYPE;      //remote or local
+const FLUID_REMOTE_TENANT_ID = process.env.REACT_APP_FLUID_REMOTE_TENANT_ID;    // values from Fluid relay service in Azure
 const FLUID_REMOTE_PRIMARY_KEY = process.env.REACT_APP_FLUID_REMOTE_PRIMARY_KEY;
 const FLUID_REMOTE_ENDPOINT = process.env.REACT_APP_FLUID_REMOTE_ENDPOINT;
 
 class FluidService {
 
     // Service state
-    #serviceConfig;
-    #client;
-    #container;
-    #people = [];
-    #registeredEventHandlers = [];
+    #serviceConfig;         // Fluid client configuration
+    #client;                // Fluid client
+    #container;             // Fluid container
+    #people = [];           // Local array of people who will speak
+    #registeredEventHandlers = [];  // Array of event handlers to call when contents change
 
     // Constants
     #containerSchema = {

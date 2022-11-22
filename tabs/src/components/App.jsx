@@ -3,7 +3,7 @@ import { HashRouter as Router, Route } from "react-router-dom";
 import Privacy from "./Privacy";
 import TermsOfUse from "./TermsOfUse";
 import Tab from "./WhosNext";
-import TabConfig from "./TabConfig";
+import WhosNextConfig from "./WhosNextConfig";
 import "./App.css";
 
 /**
@@ -15,7 +15,7 @@ export default function App() {
     <Router>
       <Route exact path="/privacy" component={Privacy} />
       <Route exact path="/termsofuse" component={TermsOfUse} />
-      <Route exact path="/config" component={TabConfig} />
+      <Route exact path="/config" component={WhosNextConfig} />
       <Route exact path="/tab" component={Tab} />
     </Router>
   );
