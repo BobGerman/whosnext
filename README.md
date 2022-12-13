@@ -9,7 +9,7 @@
 🚀So [Bob German](https://github.com/BobGerman) and [Rabia Williams](https://github.com/rabwill) decided to take the necessary step, cloud 🥑 style, to create a meeting app called "Who's next" which will help choose attendees from a meeting.
 👀 Here is a quick look of how the app works!
 
-![whos next image](./assets/WhosTurn.gif)
+![whos next image](./assets/WhosNext.gif)
 
 ⚙️They used [Teams Toolkit](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio-code), a VS Code extension to create their base teams app from a sample meeting app available in the toolkit itself.
 Then they used [Fluid Framework](https://fluidframework.com/docs/) to synchronize the view for each attendee. 
