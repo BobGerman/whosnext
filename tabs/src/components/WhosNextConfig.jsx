@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { app, pages } from "@microsoft/teams-js";
 
-import FluidService from "../services/fluid.js"
+// import FluidService from "../services/fluid.js"
 
 // Tab configuration page
 class WhosNextConfig extends React.Component {
@@ -10,25 +10,28 @@ class WhosNextConfig extends React.Component {
   componentDidMount() {
     app.initialize().then(async () => {
 
-      let containerId;
+      // let containerId;
 
       // Get the container id, which is saved as the tab's entity ID
-      const config = await pages.getConfig();
-      containerId = config?.entityId;
-      if (!containerId) {
-        containerId = await FluidService.getNewContainer();
-      }
+      // const config = await pages.getConfig();
+      // containerId = config?.entityId;
+      
+      // TODO: Drop this entirely if Live Share works
+      // containerId = containerId || 123;
+      // if (!containerId) {
+      //   containerId = await FluidService.getNewContainer();
+      // }
 
-      this.setState({
-        containerId: containerId
-      });
+      // this.setState({
+      //   containerId: 0 // containerId
+      // });
 
       //  When the user clicks "Save", save the updated configuration
       pages.config.registerOnSaveHandler(async (saveEvent) => {
         const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
         await pages.config.setConfig({
           suggestedDisplayName: "Who's next?",
-          entityId: containerId,
+          entityId: "WhosNext",
           contentUrl: baseUrl + "/index.html#/tab",
           websiteUrl: baseUrl + "/index.html#/tab",
         });

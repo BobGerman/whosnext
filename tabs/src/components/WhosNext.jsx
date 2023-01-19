@@ -28,7 +28,8 @@ class WhosNextTab extends React.Component {
       const meetingId = context?.meeting?.id;
       const config = await pages.getConfig();
       const containerId = config?.entityId;
-      await FluidService.useContainer(containerId);
+      // await FluidService.useContainer(containerId);
+      await FluidService.initialize();
       const people = await FluidService.getPersonList();
       this.setState({
         userPrincipalName: userPrincipalName,

@@ -1,5 +1,7 @@
+import { LiveShareClient, LivePresence } from "@microsoft/live-share";
+import { app, LiveShareHost } from "@microsoft/teams-js";
 import { SharedMap } from "fluid-framework";
-import { AzureClient } from "@fluidframework/azure-client";
+// import { AzureClient } from "@fluidframework/azure-client";
 import { InsecureTokenProvider } from "@fluidframework/test-client-utils"
 import * as dotenv from 'dotenv';
 dotenv.config()
@@ -62,41 +64,67 @@ class FluidService {
                 }
             };
         }
-        this.#client = new AzureClient(this.#serviceConfig);
+        // this.#client = new AzureClient(this.#serviceConfig);
 
     }
 
-    getNewContainer = async () => {
-        const { container } = await this.#client.createContainer(this.#containerSchema);
+    // TODO: Add singleton promise to debounce this function
+    initialize = async () => {
+        try {
+            await app.initialize();
+            let context = await app.getContext();
+            const host = LiveShareHost.create();
 
-        // Populate the initial data
-        container.initialObjects.personMap.set(this.#personValueKey,
-            JSON.stringify(this.#people));
-
-        // Attach to service
-        const id = await container.attach();
-        this.#container = container;
-        return id;
-    }
-
-    useContainer = async (id) => {
-        if (!this.#container) {
-            const { container } = await this.#client.getContainer(id, this.#containerSchema);
+            const liveShare = new LiveShareClient(host);
+            // const schema = {
+            //     initialObjects: {
+            //         presence: LivePresence 
+            //     },
+            // };
+            const { container } = 
+                await liveShare.joinContainer(this.#containerSchema, (c) => {
+                    console.log(`I might have a container ${c}`);
+                });
             this.#container = container;
-
-            const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
-            this.#people = JSON.parse(json);
-
-            this.#container.initialObjects.personMap.on("valueChanged", async () => {
-                const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
-                this.#people = JSON.parse(json);
-                for (let handler of this.#registeredEventHandlers) {
-                    await handler(this.#people);
-                }
-            });
         }
-        return id;
+        catch (error) {
+            console.log(error);
+        }
     }
+
+    // For Azure service
+    // getNewContainer = async () => {
+    //     const { container } = await this.#client.createContainer(this.#containerSchema);
+
+    //     // Populate the initial data
+    //     container.initialObjects.personMap.set(this.#personValueKey,
+    //         JSON.stringify(this.#people));
+
+    //     // Attach to service
+    //     const id = await container.attach();
+    //     this.#container = container;
+    //     return id;
+    // }
+
+    // For Azure service
+    // useContainer = async (id) => {
+    //     if (!this.#container) {
+    //         const { container } = await this.#client.getContainer(id, this.#containerSchema);
+    //         this.#container = container;
+
+    //         const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+    //         this.#people = JSON.parse(json);
+
+    //         this.#container.initialObjects.personMap.on("valueChanged", async () => {
+    //             const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+    //             this.#people = JSON.parse(json);
+    //             for (let handler of this.#registeredEventHandlers) {
+    //                 await handler(this.#people);
+    //             }
+    //         });
+    //     }
+    //     return id;
+    // }
 
     // Function to uplodate the Fluid relay from the local array of people
     #updateFluid = async () => {
