@@ -36,9 +36,8 @@
             "context": [
                 "meetingChatTab",
                 "meetingDetailsTab",
-                "meetingSidePanel",
-                "meetingStage"
-            ]
+                "meetingSidePanel"
+              ]
         }
     ],
     "permissions": [
