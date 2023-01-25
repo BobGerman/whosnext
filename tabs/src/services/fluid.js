@@ -87,6 +87,18 @@ class FluidService {
                         console.log(`I might have a container ${c}`);
                 });
             this.#container = container;
+
+            const json = this.#container.initialObjects.personMap.get(this.#personValueKey) || "[]";
+            this.#people = JSON.parse(json);
+
+            this.#container.initialObjects.personMap.on("valueChanged", async () => {
+                const json = this.#container.initialObjects.personMap.get(this.#personValueKey);
+                this.#people = JSON.parse(json);
+                for (let handler of this.#registeredEventHandlers) {
+                    await handler(this.#people);
+                }
+            });
+
         }
         catch (error) {
             console.log(error);
