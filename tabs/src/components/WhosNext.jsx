@@ -1,5 +1,5 @@
 import React from "react";
-import { app, pages } from "@microsoft/teams-js";
+import { app } from "@microsoft/teams-js";
 
 import './WhosNext.scss';
 import FluidService from "../services/fluid.js"
@@ -11,8 +11,8 @@ class WhosNextTab extends React.Component {
     this.state = {
       userPrincipalName: '',
       addedName: '',
-      meetingId: '',
-      containerId: '',
+      // meetingId: '',
+      // containerId: '',
       people: []
     };
     this.inputChange = this.inputChange.bind(this);
@@ -25,16 +25,16 @@ class WhosNextTab extends React.Component {
 
       const context = await app.getContext();
       const userPrincipalName = context?.user?.userPrincipalName.split('@')[0];
-      const meetingId = context?.meeting?.id;
-      const config = await pages.getConfig();
-      const containerId = config?.entityId;
+      // const meetingId = context?.meeting?.id;
+      // const config = await pages.getConfig();
+      // const containerId = config?.entityId;
       // await FluidService.useContainer(containerId);
       await FluidService.initialize();
       const people = await FluidService.getPersonList();
       this.setState({
         userPrincipalName: userPrincipalName,
-        meetingId: meetingId,
-        containerId: containerId,
+        // meetingId: meetingId,
+        // containerId: containerId,
         people: people
       });
 

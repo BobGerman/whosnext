@@ -83,7 +83,8 @@ class FluidService {
             // };
             const { container } = 
                 await liveShare.joinContainer(this.#containerSchema, (c) => {
-                    console.log(`I might have a container ${c}`);
+                // await liveShare.joinContainer(schema, (c) => {
+                        console.log(`I might have a container ${c}`);
                 });
             this.#container = container;
         }
