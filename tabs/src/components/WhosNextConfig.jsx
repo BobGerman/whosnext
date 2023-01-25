@@ -2,29 +2,11 @@ import React from "react";
 import "./App.css";
 import { app, pages } from "@microsoft/teams-js";
 
-// import FluidService from "../services/fluid.js"
-
 // Tab configuration page
 class WhosNextConfig extends React.Component {
 
   componentDidMount() {
     app.initialize().then(async () => {
-
-      // let containerId;
-
-      // Get the container id, which is saved as the tab's entity ID
-      // const config = await pages.getConfig();
-      // containerId = config?.entityId;
-      
-      // TODO: Drop this entirely if Live Share works
-      // containerId = containerId || 123;
-      // if (!containerId) {
-      //   containerId = await FluidService.getNewContainer();
-      // }
-
-      // this.setState({
-      //   containerId: 0 // containerId
-      // });
 
       //  When the user clicks "Save", save the updated configuration
       pages.config.registerOnSaveHandler(async (saveEvent) => {
@@ -51,11 +33,7 @@ class WhosNextConfig extends React.Component {
       <div>
         <h1>Tab Configuration</h1>
         <div>
-          {this.state?.containerId ? 
-            `We have configured container ${this.state.containerId} for this tab. Please click the Save button to continue.`
-            :
-            "Loading ..."
-          }
+          There's nothing to configure; please click Save to add the Who's Next tab.
         </div>
       </div >
     );
