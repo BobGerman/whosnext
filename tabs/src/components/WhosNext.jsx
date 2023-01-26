@@ -11,6 +11,7 @@ class WhosNextTab extends React.Component {
     this.state = {
       ready: false,
       message: 'Connecting to Fluid service...',
+      userName: '',
       addedName: '',
       people: []
     };
@@ -25,6 +26,7 @@ class WhosNextTab extends React.Component {
       try {
 
         const context = await app.getContext();
+        const userName = context?.user?.userPrincipalName.split('@')[0];
 
         // Ensure we're running in a side panel
         if (context.page.frameContext !== FrameContexts.sidePanel) {
@@ -41,6 +43,7 @@ class WhosNextTab extends React.Component {
         this.setState({
           ready: true,
           message: "",
+          userName: userName,
           people: people
         });
 
@@ -86,7 +89,7 @@ class WhosNextTab extends React.Component {
   }
 
   render() {
-    const { ready, addedName, message, people } = this.state;
+    const { ready, addedName, message, people, userName } = this.state;
 
     if (!ready) {
 
@@ -131,7 +134,7 @@ class WhosNextTab extends React.Component {
               value={addedName} />
             <button type="submit" onClick={async () => {
               try {
-                await FluidService.addPerson(addedName);
+                await FluidService.addPerson(addedName || userName);
                 this.setState({ addedName: "", message: "" });
               } catch (error) {
                 this.setState({ message: error.message });
