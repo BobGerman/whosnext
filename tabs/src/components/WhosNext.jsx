@@ -2,7 +2,6 @@ import React from "react";
 import { app } from "@microsoft/teams-js";
 
 import './WhosNext.scss';
-// import FluidService from "../services/fluidMock.js"
 import FluidService from "../services/fluidLiveShare.js"
 
 class WhosNextTab extends React.Component {
@@ -12,7 +11,7 @@ class WhosNextTab extends React.Component {
     this.state = {
       ready: false,
       message: 'Connecting to Fluid service...',
-      userPrincipalName: '',
+      userName: '',
       addedName: '',
       people: []
     };
@@ -27,20 +26,23 @@ class WhosNextTab extends React.Component {
       try {
 
         const context = await app.getContext();
-        const userPrincipalName = context?.user?.userPrincipalName.split('@')[0];
+        const userName = context?.user?.userPrincipalName.split('@')[0];
 
         await FluidService.connect();
         const people = await FluidService.getPersonList();
         this.setState({
           ready: true,
-          userPrincipalName: userPrincipalName,
+          message: "",
+          userName: userName,
           people: people
         });
 
         // Update state when fluid data changes
         FluidService.onNewData((people) => {
           this.setState({
-            people: people
+            ready: true,
+            people: people,
+            message: ""
           });
         });
 
@@ -56,7 +58,6 @@ class WhosNextTab extends React.Component {
 
   }
 
-
   //on text change in input box
   inputChange = (e) => {
     this.setState({
@@ -67,15 +68,17 @@ class WhosNextTab extends React.Component {
   //on key down enter in input box
   keyDown = async (e) => {
     if (e.key === 'Enter') {
-      await FluidService.addPerson(e.target.value)
-      this.setState({
-        addedName: ""
-      });
+      try {
+        await FluidService.addPerson(e.target.value);
+        this.setState({ addedName: "", message: "" });
+      } catch (error) {
+        this.setState({ message: `ERROR: ${error.message}` });
+      }
     }
   }
 
   render() {
-    const { addedName, userPrincipalName } = this.state;
+    const { addedName, userName } = this.state;
 
     if (!this.state.ready) {
 
@@ -84,6 +87,8 @@ class WhosNextTab extends React.Component {
         { /* Heading */}
         <h1>Who's next?</h1>
         <br />
+
+        { /* Message */}
         <div class="message">{this.state.message}</div>
 
       </div>
@@ -110,11 +115,17 @@ class WhosNextTab extends React.Component {
           { /* Input box w/title and button */}
           <h2>Add your name to the list to speak</h2>
           <div className="add-name">
-            <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
+            <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown}
+             value={addedName} />
             <button type="submit" onClick={async () => {
-              await FluidService.addPerson(addedName ? addedName : userPrincipalName);
-              this.setState({ addedName: "" });
+              try {
+                await FluidService.addPerson(addedName ? addedName : userName);
+                this.setState({ addedName: "", message: "" });  
+              } catch (error) {
+                this.setState({ message: `ERROR: ${error.message}`});
+              }
             }}>+</button>
+            <div class="message">{this.state.message}</div>
             <hr />
           </div>
 

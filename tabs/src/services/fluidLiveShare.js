@@ -17,21 +17,25 @@ import { SharedMap } from "fluid-framework";
 
 class FluidService {
 
+    // Constants
+    #PERSON_VALUE_KEY = "person-value-key";
+
     // Service state
     #container;             // Fluid container
     #people = [];           // Local array of people who will speak
     #registeredEventHandlers = [];  // Array of event handlers to call when contents change
-
-    // Constants
-    #PERSON_VALUE_KEY = "person-value-key";
-
     #connectPromise;        // Singleton promise so we only connect once
+
+    // Public function returns a singleton promise that resolves when we're
+    // connected to the Fluid Relay service
     connect = () => {
         if (!this.#connectPromise) {
             this.#connectPromise = this.#connect();
         }
         return this.#connectPromise
     }
+
+    // Private function connects to the Fluid Relay service
     #connect = async () => {
         try {
             const host = LiveShareHost.create();
@@ -59,22 +63,25 @@ class FluidService {
         }
         catch (error) {
             console.log(`Error in fluid service: ${error.message}`);
-            throw(error);
+            throw (error);
         }
     }
 
-    // Function to update the Fluid relay from the local array of people
+    // Private function to update the Fluid relay from the local array of people
     #updateFluid = async () => {
         const json = JSON.stringify(this.#people);
         this.#container.initialObjects.personMap.set(this.#PERSON_VALUE_KEY, json);
     }
 
+    // Public functions used by the UI
     addPerson = async (name) => {
-        if (!this.#people.includes(name)) {
-            this.#people.push(name);
-            await this.#updateFluid();
+        if (this.#people.includes(name)) {
+            throw new Error(`${name} is already on the list`);
         }
+        this.#people.push(name);
+        await this.#updateFluid();
     }
+
 
     removePerson = async (name) => {
         if (this.#people.includes(name)) {
