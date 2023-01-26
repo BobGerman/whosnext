@@ -36,10 +36,10 @@ class FluidService {
     // Private function connects to the Fluid Relay service
     #connect = async () => {
         try {
-            const host = LiveShareHost.create();
+            const liveShareHost = LiveShareHost.create();
 
-            const liveShare = new LiveShareClient(host);
-            const { container } = await liveShare.joinContainer(
+            const liveShareClient = new LiveShareClient(liveShareHost);
+            const { container } = await liveShareClient.joinContainer(
                 // Container schema
                 {
                     initialObjects: { personMap: SharedMap }
