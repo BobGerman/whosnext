@@ -1,8 +1,6 @@
 import { LiveShareClient } from "@microsoft/live-share";
 import { app, LiveShareHost } from "@microsoft/teams-js";
 import { SharedMap } from "fluid-framework";
-import * as dotenv from 'dotenv';
-dotenv.config()
 
 // Service definition:
 //
@@ -27,8 +25,14 @@ class FluidService {
     // Constants
     #PERSON_VALUE_KEY = "person-value-key";
 
-    // TODO: Add singleton promise to debounce this function
-    connect = async () => {
+    #connectPromise;        // Singleton promise so we only connect once
+    connect = () => {
+        if (!this.#connectPromise) {
+            this.#connectPromise = this.#connect();
+        }
+        return this.#connectPromise
+    }
+    #connect = async () => {
         try {
             await app.initialize();
             const host = LiveShareHost.create();
