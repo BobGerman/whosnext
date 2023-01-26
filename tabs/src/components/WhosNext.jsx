@@ -2,6 +2,7 @@ import React from "react";
 import { app } from "@microsoft/teams-js";
 
 import './WhosNext.scss';
+// import FluidService from "../services/fluidMock.js"
 import FluidService from "../services/fluidLiveShare.js"
 
 class WhosNextTab extends React.Component {
@@ -24,7 +25,7 @@ class WhosNextTab extends React.Component {
       const context = await app.getContext();
       const userPrincipalName = context?.user?.userPrincipalName.split('@')[0];
 
-      await FluidService.initialize();
+      await FluidService.connect();
       const people = await FluidService.getPersonList();
       this.setState({
         userPrincipalName: userPrincipalName,
