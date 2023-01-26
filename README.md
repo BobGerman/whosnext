@@ -50,7 +50,8 @@ Follow the instructions to [create a meeting in Microsoft Teams](https://support
 
 ### Run the app locally
 
-- In Visual Studio Code: Start debugging the project by hitting the `F5` key in your keyboard. 
+- In Visual Studio Code: Open the project folder and start debugging the project by hitting the `F5` key in your keyboard. 
+  - You may need to run `npm install` first
   - Alternatively open the `Run and Debug Activity` panel(Ctrl+Shift+D) in Visual Studio Code and click the `Run and Debug` green arrow button.
 - The Teams web client will launch in your browser. Select `Add to a meeting`, then select the meeting you just created. (It may take a few minutes to appear on the list)
 - Click `Set up a tab` in the next step, it will take you to the meeting configuration page.

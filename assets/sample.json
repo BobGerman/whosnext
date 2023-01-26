@@ -9,8 +9,8 @@
     "longDescription": [
       "This app helps decide who should speak next in a meeting. It is anonymous; anyone in the meeting can enter a name to put on the list."
     ],
-    "creationDateTime": "2020-04-23",
-    "updateDateTime": "2020-04-23",
+    "creationDateTime": "2023-01-26",
+    "updateDateTime": "2023-01-26",
     "products": [
       "Teams"
     ],
@@ -82,32 +82,16 @@
     ],
     "references": [
       {
-        "name": "Azure Bot Framework resources",
-        "url": "https://aka.ms/sample-ref-teams-bot-framework-resources"
+        "name": "Live Share SDK",
+        "url": "https://aka.ms/live-share-sdk"
       },
       {
-        "name": "Microsoft Teams bots",
-        "url": "https://aka.ms/sample-ref-teams-docs-bots"
+        "name": "Fluid Framework",
+        "url": "https://aka.ms/fluid-framework"
       },
       {
-        "name": "Microsoft Teams messaging extensions",
-        "url": "https://aka.ms/sample-ref-docs-msgext"
-      },
-      {
-        "name": "Microsoft Teams task modules",
-        "url": "https://aka.ms/sample-ref-teams-docs-task-modules"
-      },
-      {
-        "name": "Teams developer questions",
-        "url": "https://aka.ms/sample-ref-teams-dev-questions"
-      },
-      {
-        "name": "Teams development videos from Microsoft",
-        "url": "https://aka.ms/sample-ref-teams-vids-from-microsoft"
-      },
-      {
-        "name": "Teams development videos from the community",
-        "url": "https://aka.ms/sample-ref-teams-vids-from-community"
+        "name": "Teams Toolkit",
+        "url": "https://aka.ms/teams-toolkit"
       }
     ],
     "version": "1.0.0.0"
