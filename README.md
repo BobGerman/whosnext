@@ -14,11 +14,12 @@
 ⚙️They used [Teams Toolkit](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio-code), a VS Code extension to create their base teams app from a sample meeting app available in the toolkit itself.
 Then they used [Fluid Framework](https://fluidframework.com/docs/) to synchronize the view for each attendee. 
 
-⚠️This app doesn't require any Azure AD permission; if you can upload a Teams app, you can run this. It does require deploying a service in Azure.
+⚠️ If you can upload a Teams app, you can run this. It doesn't require any Azure AD permission or other administrative consent.
+
 ## Prerequisites
 
 - [NodeJS](https://nodejs.org/en/)
-- A Microsoft 365 tenant in which you are an administrator. Please don't test in production; you can get a free Microsoft 365 developer tenant by joining the [Microsoft 365 developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program)
+- A Microsoft 365 tenant in which you have permission to upload Teams apps. Please don't develop in production; you can get a free Microsoft 365 developer tenant by joining the [Microsoft 365 developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program)
 - [Teams Toolkit Visual Studio Code Extension](https://aka.ms/teams-toolkit)
 
 
@@ -26,6 +27,7 @@ Then they used [Fluid Framework](https://fluidframework.com/docs/) to synchroniz
 
 Version|Date|Author|Comments
 -------|----|----|--------
+1/1|January 25, 2023|Bob German|Update to use [Live Share SDK](https://learn.microsoft.com/microsoftteams/platform/apps-in-teams-meetings/teams-live-share-overview)
 1.0|November 21, 2022|Bob German and Rabia Williams|Initial release
 
 ## Disclaimer
@@ -37,60 +39,28 @@ Version|Date|Author|Comments
 ## This demo illustrates
 
 - Use of Teams Toolkit to create a simple meeting tab application
-- Use of Fluid framework to synchronize the contents of a meeting tab
-- Creating and saving a Fluid Relay Service container in the tab configuration page
-
-WARNING: For simplicity, this sample uses the **InsecureTokenProvider** class to communicate with the Fluid Relay Service. This class should not be used in production; see [this page](https://fluidframework.com/docs/apis/test-client-utils/insecuretokenprovider-class/) for details.
+- Use of Live Share SDK to obtain a Fluid framework container
+- Use of Fluid framework to synchronize the contents of a meeting tab among meeting attendees
 
 ## Minimal Path to Awesome
 
-### Provision an Azure Fluid Relay Service
-
-This application displays the same list of speakers to all meeting attendees with real-time updates. The Fluid Framework makes this easy, but to use it you need to provision an instance of the Azure Fluid Relay service somewhere in Azure.
-
-For complete instructions, see [this How to article](https://learn.microsoft.com/azure/azure-fluid-relay/how-tos/provision-fluid-azure-portal).
-
-![Access key screen](/assets/AzureFluidRelayService.png)
-
-When you're finished deploying the service, go to the Access Key tab and copy down the tenant ID, primary key, and service endpoint URL and save them for when you configure your application.
-
-> Note: Provision Azure cloud resources and deploy to Azure may cause charges to your Azure Subscription.
-
 ### Prepare a meeting
 
-Follow the instruction to [create a meeting in Teams](https://support.microsoft.com/en-us/office/create-a-meeting-in-teams-for-personal-and-small-business-use-eb571219-517b-49bf-afe1-4fff091efa85). Then in the Calendar you can find the meeting you just created. Double click the meeting will open the meeting details, and will enable the meeting app to be added in this meeting in later steps.
+Follow the instructions to [create a meeting in Microsoft Teams](https://support.microsoft.com/office/create-a-meeting-in-teams-for-personal-and-small-business-use-eb571219-517b-49bf-afe1-4fff091efa85). Then in the Calendar you can find the meeting you just created. Double click the meeting will open the meeting details, and will enable the meeting app to be added in this meeting in later steps.
 
 ### Run the app locally
 
-- Add the Fluid Relay Service details into your /src/tabs/.env.teamsfx.local file:
-
-~~~text
-REACT_APP_FLUID_CONNECTION_TYPE=remote
-REACT_APP_FLUID_REMOTE_TENANT_ID=(your tenant ID)
-REACT_APP_FLUID_REMOTE_PRIMARY_KEY=(your primary key)
-REACT_APP_FLUID_REMOTE_ENDPOINT=(your endpoint URL)
-~~~
-
 - In Visual Studio Code: Start debugging the project by hitting the `F5` key in your keyboard. 
   - Alternatively open the `Run and Debug Activity` panel(Ctrl+Shift+D) in Visual Studio Code and click the `Run and Debug` green arrow button.
-- The Teams web client will launch in your browser, click the small arrow sit aside the `Add` button and select `Add to a meeting`, then select the meeting you just created. 
+- The Teams web client will launch in your browser. Select `Add to a meeting`, then select the meeting you just created. (It may take a few minutes to appear on the list)
 - Click `Set up a tab` in the next step, it will take you to the meeting configuration page.
-- In the configuration page, click `Save`, this may take several minutes, and then you will see the meeting chat tab.
+- In the configuration page, click `Save`, this may take several minutes, and then you will see the meeting chat tab, however it will only display a message saying that you need to join the meeting in order to use it.
 - Click `Join` to join the meeting.
-- Select the tab (default name is `My Tab`) in the bar, you will see a side panel tab in the meeting.
+- Select the tab (with a cartoon bubble logo and a default name of `Who's Next`) in the tab bar above the meeting scren. You will see a side panel tab in the meeting.
 
 ### Deploy the app to Azure
 
 Deploy your project to Azure by following these steps:
-
-- Add the Fluid Relay Service details into your /src/tabs/.env.teamsfx.dev file:
-
-~~~text
-REACT_APP_FLUID_CONNECTION_TYPE=remote
-REACT_APP_FLUID_REMOTE_TENANT_ID=(your tenant ID)
-REACT_APP_FLUID_REMOTE_PRIMARY_KEY=(your primary key)
-REACT_APP_FLUID_REMOTE_ENDPOINT=(your endpoint URL)
-~~~
 
 - Open Teams Toolkit in Visual Studio Code, and sign in your Azure account by clicking the `Sign in to Azure` in the `ACCOUNTS` section from sidebar.
 - After you signed in, select a subscription under your account. The Teams Toolkit will use this subscription to provision Azure resources to host you app.
@@ -99,7 +69,7 @@ REACT_APP_FLUID_REMOTE_ENDPOINT=(your endpoint URL)
 - Open the Teams Toolkit and click `Deploy to the cloud` in the `DEVELOPMENT` section.
   - Alternatively open the command palette(Ctrl+Shift+P) and type: `Teams: Deploy to the cloud` command.
 
-> Note: Provision Azure cloud resources and deploy to Azure may cause charges to your Azure Subscription.
+> Note: Provisioning Azure cloud resources and deploying to Azure may cause charges to your Azure Subscription.
 
 ### Preview the app in Teams client
 
@@ -110,5 +80,9 @@ After you have completed the provision and deploy steps in `Deploy the app to Az
   1. Open the `Run and Debug Activity` panel from sidebar, or use short key Ctrl+Shift+D.
   1. Select `Launch Remote (Edge)` or `Launch Remote (Chrome)` in the launch configuration (a dropdown selection in the upper-left corner).
   1. Press the `Start Debugging` (small green arrow) button to launch your app, the Teams web client will be automatically opened in your browser, where you will see your app running remotely from Azure.
+
+### Use in other tenants
+
+This is a very simple application. It doesn't authenticate users, so the manifest works in any tenant. When you have a production deployment in Azure, you can use the same app package in any Microsoft 365 tenant where you have permission to upload or install it.
 
 <img src="https://pnptelemetry.azurewebsites.net/teams-dev-samples/samples/tab-meeting-whos-next" />
