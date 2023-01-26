@@ -1,18 +1,17 @@
 import React from "react";
-import { app, pages } from "@microsoft/teams-js";
+import { app, FrameContexts } from "@microsoft/teams-js";
 
 import './WhosNext.scss';
-import FluidService from "../services/fluid.js"
+import FluidService from "../services/fluidLiveShare.js"
 
 class WhosNextTab extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      userPrincipalName: '',
+      ready: false,
+      message: 'Connecting to Fluid service...',
       addedName: '',
-      meetingId: '',
-      containerId: '',
       people: []
     };
     this.inputChange = this.inputChange.bind(this);
@@ -23,28 +22,48 @@ class WhosNextTab extends React.Component {
 
     app.initialize().then(async () => {
 
-      const context = await app.getContext();
-      const userPrincipalName = context?.user?.userPrincipalName.split('@')[0];
-      const meetingId = context?.meeting?.id;
-      const config = await pages.getConfig();
-      const containerId = config?.entityId;
-      await FluidService.useContainer(containerId);
-      const people = await FluidService.getPersonList();
-      this.setState({
-        userPrincipalName: userPrincipalName,
-        meetingId: meetingId,
-        containerId: containerId,
-        people: people
-      });
+      try {
 
-      // Update state when fluid data changes
-      FluidService.onNewData((people) => {
+        const context = await app.getContext();
+
+        // Ensure we're running in a side panel
+        if (context.page.frameContext !== FrameContexts.sidePanel) {
+          this.setState({
+            ready: false,
+            message: "This tab only works in the side panel of a Teams meeting. Please join the meeting to use it."
+          })
+          return;
+        }
+
+        // Attempt to connect to the Fluid relay service
+        await FluidService.connect();
+        const people = await FluidService.getPersonList();
         this.setState({
+          ready: true,
+          message: "",
           people: people
         });
-      });
+
+        // Register an event handler to update state when fluid data changes
+        FluidService.onNewData((people) => {
+          this.setState({
+            ready: true,
+            people: people,
+            message: ""
+          });
+        });
+
+      } catch (error) {
+
+        // Display any errors encountered while connecting to Fluid service
+        this.setState({
+          ready: false,
+          message: `ERROR: ${error.message}`
+        });
+
+      }
     });
-    // Next steps: Error handling using the error object
+
   }
 
   //on text change in input box
@@ -57,90 +76,118 @@ class WhosNextTab extends React.Component {
   //on key down enter in input box
   keyDown = async (e) => {
     if (e.key === 'Enter') {
-      await FluidService.addPerson(e.target.value)
-      this.setState({
-        addedName: ""
-      });
+      try {
+        await FluidService.addPerson(e.target.value);
+        this.setState({ addedName: "", message: "" });
+      } catch (error) {
+        this.setState({ message: error.message });
+      }
     }
   }
 
   render() {
-    const { addedName,userPrincipalName } = this.state;
+    const { ready, addedName, message, people } = this.state;
 
-    return (
+    if (!ready) {
 
-      <div className="speaker-list">
+      // We're not ready so just display the message
+      return (
+        <div>
 
-        { /* Heading */}
-        <h1>Who's next?</h1>
+          { /* Heading */}
+          <h1>Who's next?</h1>
+          <br />
 
-        { /* Current speaker (if any) */}
-        {this.state.people.length > 0 &&
-          <div className="speaker-box">
-            <h2>Now speaking:</h2>
-            <h1 className="reveal-text">
-              {this.state.people[0]}
-            </h1>
-          </div>
-        }
+          { /* Message */}
+          <div class="message">{message}</div>
 
-        { /* Input box w/title and button */}
-        <h2>Add your name to the list to speak</h2>
-        <div className="add-name">
-          <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown} value={addedName} />
-          <button type="submit" onClick={async () => {
-            await FluidService.addPerson(addedName ? addedName : userPrincipalName);
-            this.setState({ addedName: "" });
-          }}>+</button>
-          <hr />
         </div>
+      );
 
-        { /* List heading */}
-        <div className="display-list">
-          {this.state.people.length > 1 && <div>
-            <div className="people-list ">
-              <h2>{this.state.people.length-2 ? 
-                `${this.state.people.length - 1} more people waiting to speak` :
-                `1 person waiting to speak`}</h2>
+    } else {
 
-              { /* List of people waiting to speak  */}
-              {this.state.people.slice(1).map((item, index) => (
-                <li key={index} className="list-item">
-                  {item}
-                  <div
-                    className="close"
-                    onClick={async () => {
-                      await FluidService.removePerson(item);
-                    }}
-                  >
-                    x
-                  </div>
-                </li>
-              ))}
+      // We're ready; render the whole UI
+      return (
+
+        <div className="speaker-list">
+
+          { /* Heading */}
+          <h1>Who's next?</h1>
+
+          { /* Current speaker (if any) */}
+          {people.length > 0 &&
+            <div className="speaker-box">
+              <h2>Now speaking:</h2>
+              <h1 className="reveal-text">
+                {people[0]}
+              </h1>
             </div>
-          </div>
           }
-        </div>
 
-        { /* Who's next button */ }
-        <div>
-          <button onClick={async () => {
-            await FluidService.nextPerson();
-          }}>
-            Next speaker
-          </button>
-        </div>
+          { /* Input box w/title and button */}
+          <h2>Add your name to the list to speak</h2>
+          <div className="add-name">
+            <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown}
+              value={addedName} />
+            <button type="submit" onClick={async () => {
+              try {
+                await FluidService.addPerson(addedName);
+                this.setState({ addedName: "", message: "" });
+              } catch (error) {
+                this.setState({ message: error.message });
+              }
+            }}>+</button>
+            <div class="message">{message}</div>
+            <hr />
+          </div>
 
-        { /* Shuffle button */ }
-        <div>
-          <button className="shuffle" onClick={async () => {
-            await FluidService.shuffle();
-          }}>
-            Shuffle
-          </button>
+          { /* List heading */}
+          <div className="display-list">
+            {people.length > 1 && <div>
+              <div className="people-list ">
+                <h2>{people.length - 2 ?
+                  `${people.length - 1} more people waiting to speak` :
+                  `1 person waiting to speak`}</h2>
+
+                { /* List of people waiting to speak  */}
+                {people.slice(1).map((item, index) => (
+                  <li key={index} className="list-item">
+                    {item}
+                    <div
+                      className="close"
+                      onClick={async () => {
+                        await FluidService.removePerson(item);
+                      }}
+                    >
+                      x
+                    </div>
+                  </li>
+                ))}
+              </div>
+            </div>
+            }
+          </div>
+
+          { /* Who's next button */}
+          <div>
+            <button onClick={async () => {
+              await FluidService.nextPerson();
+            }}>
+              Next speaker
+            </button>
+          </div>
+
+          { /* Shuffle button */}
+          <div>
+            <button className="shuffle" onClick={async () => {
+              await FluidService.shuffle();
+            }}>
+              Shuffle
+            </button>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 

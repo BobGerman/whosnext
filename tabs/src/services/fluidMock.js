@@ -1,13 +1,10 @@
-// Service definition:
-//
 // interface IFluidService {
-//     getNewContainer: () => string;          // Gets a new container and returns its ID
-//     useContainer: (id: string) => Promise<void>;
-//     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
-//     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
+//     connect: () => void;                             // Connect to the Fluid service
+//     addPerson: (name: string) => Promise<void>;      // Add a person to the list
+//     removePerson: (name: string) => Promise<void>;   // Remove a person from the list
 //     nextPerson: () => Promise<void>;                 // Go to next person
 //     shuffle: () => Promise<void>;                    // Shuffle the list of speakers
-//     getPersonList: () => Promise<string[]>;  // Get the current person list
+//     getPersonList: () => Promise<string[]>;          // Get the current person list
 //     // Event handler called when new person list is available
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
@@ -18,9 +15,7 @@ class MockFluidService {
     #people = ["Alice", "Bob", "Charlene"];
     #registeredEventHandlers = [];
 
-    getNewContainer = async () => '12345';
-
-    useContainer = async (id) => { }
+    connect = async () => { }
   
     addPerson = async (name) => {
         this.#people.push(name);
