@@ -75,6 +75,9 @@ class FluidService {
 
     // Public functions used by the UI
     addPerson = async (name) => {
+        if (!name) {
+            throw new Error (`Please enter a name to add to the list`);
+        }
         if (this.#people.includes(name)) {
             throw new Error(`${name} is already on the list`);
         }

@@ -11,7 +11,6 @@ class WhosNextTab extends React.Component {
     this.state = {
       ready: false,
       message: 'Connecting to Fluid service...',
-      userName: '',
       addedName: '',
       people: []
     };
@@ -34,15 +33,12 @@ class WhosNextTab extends React.Component {
           })
           return;
         }
-        
-        const userName = context?.user?.userPrincipalName.split('@')[0];
 
         await FluidService.connect();
         const people = await FluidService.getPersonList();
         this.setState({
           ready: true,
           message: "",
-          userName: userName,
           people: people
         });
 
@@ -87,9 +83,9 @@ class WhosNextTab extends React.Component {
   }
 
   render() {
-    const { addedName, userName } = this.state;
+    const { ready, addedName, message, people } = this.state;
 
-    if (!this.state.ready) {
+    if (!ready) {
 
       return <div>
 
@@ -98,7 +94,7 @@ class WhosNextTab extends React.Component {
         <br />
 
         { /* Message */}
-        <div class="message">{this.state.message}</div>
+        <div class="message">{message}</div>
 
       </div>
 
@@ -112,11 +108,11 @@ class WhosNextTab extends React.Component {
           <h1>Who's next?</h1>
 
           { /* Current speaker (if any) */}
-          {this.state.people.length > 0 &&
+          {people.length > 0 &&
             <div className="speaker-box">
               <h2>Now speaking:</h2>
               <h1 className="reveal-text">
-                {this.state.people[0]}
+                {people[0]}
               </h1>
             </div>
           }
@@ -128,7 +124,7 @@ class WhosNextTab extends React.Component {
              value={addedName} />
             <button type="submit" onClick={async () => {
               try {
-                await FluidService.addPerson(addedName ? addedName : userName);
+                await FluidService.addPerson(addedName);
                 this.setState({ addedName: "", message: "" });  
               } catch (error) {
                 this.setState({ message: `ERROR: ${error.message}`});
@@ -142,12 +138,12 @@ class WhosNextTab extends React.Component {
           <div className="display-list">
             {this.state.people.length > 1 && <div>
               <div className="people-list ">
-                <h2>{this.state.people.length - 2 ?
-                  `${this.state.people.length - 1} more people waiting to speak` :
+                <h2>{people.length - 2 ?
+                  `${people.length - 1} more people waiting to speak` :
                   `1 person waiting to speak`}</h2>
 
                 { /* List of people waiting to speak  */}
-                {this.state.people.slice(1).map((item, index) => (
+                {people.slice(1).map((item, index) => (
                   <li key={index} className="list-item">
                     {item}
                     <div
