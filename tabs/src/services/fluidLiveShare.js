@@ -47,6 +47,7 @@ class FluidService {
             const json = this.#container.initialObjects.personMap.get(this.#PERSON_VALUE_KEY) || "[]";
             this.#people = JSON.parse(json);
 
+            // Register a function to update the app when data in the Fluid Relay changes
             this.#container.initialObjects.personMap.on("valueChanged", async () => {
                 const json = this.#container.initialObjects.personMap.get(this.#PERSON_VALUE_KEY);
                 this.#people = JSON.parse(json);
@@ -57,11 +58,12 @@ class FluidService {
 
         }
         catch (error) {
-            console.log(error);
+            console.log(`Error in fluid service: ${error.message}`);
+            throw(error);
         }
     }
 
-    // Function to uplodate the Fluid relay from the local array of people
+    // Function to update the Fluid relay from the local array of people
     #updateFluid = async () => {
         const json = JSON.stringify(this.#people);
         this.#container.initialObjects.personMap.set(this.#PERSON_VALUE_KEY, json);

@@ -33,7 +33,9 @@ class WhosNextConfig extends React.Component {
       <div>
         <h1>Tab Configuration</h1>
         <div>
-          There's nothing to configure; please click Save to add the Who's Next tab.
+          <br />There are no configuration options for the Who's Next tab. Please click "Save" to set up your tab.
+          <br />
+          <br />Nothing to see here folks!
         </div>
       </div >
     );
