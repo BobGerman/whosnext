@@ -1,5 +1,5 @@
 import React from "react";
-import { app } from "@microsoft/teams-js";
+import { app, FrameContexts } from "@microsoft/teams-js";
 
 import './WhosNext.scss';
 import FluidService from "../services/fluidLiveShare.js"
@@ -26,6 +26,15 @@ class WhosNextTab extends React.Component {
       try {
 
         const context = await app.getContext();
+
+        if (context.page.frameContext !== FrameContexts.sidePanel ) {
+          this.setState({
+            ready: false,
+            message: "This tab only works in the side panel of a Teams meeting. Please join the meeting to use it."
+          })
+          return;
+        }
+        
         const userName = context?.user?.userPrincipalName.split('@')[0];
 
         await FluidService.connect();
