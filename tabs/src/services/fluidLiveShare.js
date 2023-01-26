@@ -2,12 +2,10 @@ import { LiveShareClient } from "@microsoft/live-share";
 import { LiveShareHost } from "@microsoft/teams-js";
 import { SharedMap } from "fluid-framework";
 
-// Service definition:
-//
 // interface IFluidService {
-//     connect: () => void;                          // Connect to the Fluid service
-//     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
-//     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
+//     connect: () => void;                             // Connect to the Fluid service
+//     addPerson: (name: string) => Promise<void>;      // Add a person to the list
+//     removePerson: (name: string) => Promise<void>;   // Remove a person from the list
 //     nextPerson: () => Promise<void>;                 // Go to next person
 //     shuffle: () => Promise<void>;                    // Shuffle the list of speakers
 //     getPersonList: () => Promise<string[]>;          // Get the current person list
@@ -18,13 +16,13 @@ import { SharedMap } from "fluid-framework";
 class FluidService {
 
     // Constants
-    #PERSON_VALUE_KEY = "person-value-key";
+    #PERSON_VALUE_KEY = "person-value-key"; // Key for use in shared map
 
     // Service state
-    #container;             // Fluid container
-    #people = [];           // Local array of people who will speak
+    #container;                     // Fluid container
+    #people = [];                   // Local array of people who will speak
     #registeredEventHandlers = [];  // Array of event handlers to call when contents change
-    #connectPromise;        // Singleton promise so we only connect once
+    #connectPromise;                // Singleton promise so we only connect once
 
     // Public function returns a singleton promise that resolves when we're
     // connected to the Fluid Relay service
@@ -84,7 +82,6 @@ class FluidService {
         this.#people.push(name);
         await this.#updateFluid();
     }
-
 
     removePerson = async (name) => {
         if (this.#people.includes(name)) {

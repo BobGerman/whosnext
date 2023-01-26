@@ -26,7 +26,8 @@ class WhosNextTab extends React.Component {
 
         const context = await app.getContext();
 
-        if (context.page.frameContext !== FrameContexts.sidePanel ) {
+        // Ensure we're running in a side panel
+        if (context.page.frameContext !== FrameContexts.sidePanel) {
           this.setState({
             ready: false,
             message: "This tab only works in the side panel of a Teams meeting. Please join the meeting to use it."
@@ -34,6 +35,7 @@ class WhosNextTab extends React.Component {
           return;
         }
 
+        // Attempt to connect to the Fluid relay service
         await FluidService.connect();
         const people = await FluidService.getPersonList();
         this.setState({
@@ -42,7 +44,7 @@ class WhosNextTab extends React.Component {
           people: people
         });
 
-        // Update state when fluid data changes
+        // Register an event handler to update state when fluid data changes
         FluidService.onNewData((people) => {
           this.setState({
             ready: true,
@@ -53,6 +55,7 @@ class WhosNextTab extends React.Component {
 
       } catch (error) {
 
+        // Display any errors encountered while connecting to Fluid service
         this.setState({
           ready: false,
           message: `ERROR: ${error.message}`
@@ -77,7 +80,7 @@ class WhosNextTab extends React.Component {
         await FluidService.addPerson(e.target.value);
         this.setState({ addedName: "", message: "" });
       } catch (error) {
-        this.setState({ message: `ERROR: ${error.message}` });
+        this.setState({ message: error.message });
       }
     }
   }
@@ -87,19 +90,23 @@ class WhosNextTab extends React.Component {
 
     if (!ready) {
 
-      return <div>
+      // We're not ready so just display the message
+      return (
+        <div>
 
-        { /* Heading */}
-        <h1>Who's next?</h1>
-        <br />
+          { /* Heading */}
+          <h1>Who's next?</h1>
+          <br />
 
-        { /* Message */}
-        <div class="message">{message}</div>
+          { /* Message */}
+          <div class="message">{message}</div>
 
-      </div>
+        </div>
+      );
 
     } else {
 
+      // We're ready; render the whole UI
       return (
 
         <div className="speaker-list">
@@ -121,22 +128,22 @@ class WhosNextTab extends React.Component {
           <h2>Add your name to the list to speak</h2>
           <div className="add-name">
             <input type="text" onChange={this.inputChange} onKeyDown={this.keyDown}
-             value={addedName} />
+              value={addedName} />
             <button type="submit" onClick={async () => {
               try {
                 await FluidService.addPerson(addedName);
-                this.setState({ addedName: "", message: "" });  
+                this.setState({ addedName: "", message: "" });
               } catch (error) {
-                this.setState({ message: `ERROR: ${error.message}`});
+                this.setState({ message: error.message });
               }
             }}>+</button>
-            <div class="message">{this.state.message}</div>
+            <div class="message">{message}</div>
             <hr />
           </div>
 
           { /* List heading */}
           <div className="display-list">
-            {this.state.people.length > 1 && <div>
+            {people.length > 1 && <div>
               <div className="people-list ">
                 <h2>{people.length - 2 ?
                   `${people.length - 1} more people waiting to speak` :

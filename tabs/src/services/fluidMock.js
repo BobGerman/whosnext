@@ -1,12 +1,10 @@
-// Service definition:
-//
 // interface IFluidService {
-//     connect: () => void;                          // Connect to the Fluid service
-//     addPerson: (name: string) => Promise<void>;      // Adds a person to the list
-//     removePerson: (name: string) => Promise<void>;   // Removes a person from the list
+//     connect: () => void;                             // Connect to the Fluid service
+//     addPerson: (name: string) => Promise<void>;      // Add a person to the list
+//     removePerson: (name: string) => Promise<void>;   // Remove a person from the list
 //     nextPerson: () => Promise<void>;                 // Go to next person
 //     shuffle: () => Promise<void>;                    // Shuffle the list of speakers
-//     getPersonList: () => Promise<string[]>;  // Get the current person list
+//     getPersonList: () => Promise<string[]>;          // Get the current person list
 //     // Event handler called when new person list is available
 //     onNewData: (handler: (personList: string[]) => void) => void;
 // }
