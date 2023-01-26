@@ -1,5 +1,5 @@
 import { LiveShareClient } from "@microsoft/live-share";
-import { app, LiveShareHost } from "@microsoft/teams-js";
+import { LiveShareHost } from "@microsoft/teams-js";
 import { SharedMap } from "fluid-framework";
 
 // Service definition:
@@ -34,13 +34,14 @@ class FluidService {
     }
     #connect = async () => {
         try {
-            await app.initialize();
             const host = LiveShareHost.create();
 
             const liveShare = new LiveShareClient(host);
-            const { container } = await liveShare.joinContainer({
-                initialObjects: { personMap: SharedMap }
-            });
+            const { container } = await liveShare.joinContainer(
+                // Container schema
+                {
+                    initialObjects: { personMap: SharedMap }
+                });
             this.#container = container;
 
             const json = this.#container.initialObjects.personMap.get(this.#PERSON_VALUE_KEY) || "[]";
